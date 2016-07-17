@@ -154,8 +154,8 @@ Although straight forward, this method has a fundamental disadvantage: git won't
 **Rename the file from the commandline** \
 An alternative is to use `git mv oldname newname` to avoid the problem described above. git will recognize the file as *renamed*, as you can see with `git status`.
 ```{r}
-git rename 01-preprocessing.do 01a-preprocessing_mainform.do # rename without move or
-git rename 01-prepcoressing.do ./01-code/01-prepcoressing.do # ... only moving, not renaming
+git mv 01-preprocessing.do 01a-preprocessing_mainform.do # rename without move or
+git mv 01-prepcoressing.do ./01-code/01-prepcoressing.do # ... only moving, not renaming
 ```
 After having committed the renaming, the changes are tracked, but by default, not shown, since the file has a different name now. To show the changes, we need to add the option `-- follow 01-preprocessing.do`. Note that this is the old name in the old directory.
 ```{r}
