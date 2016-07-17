@@ -1,0 +1,410 @@
+---
+title: "Using git"
+author: "Lorenz Walthert"
+date: "13. Mai 2016"
+output:
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+---
+```{r, global_options,include=F}
+knitr::opts_chunk$set(eval = F) # disable eval
+```
+## Basic Commandline navigation
+### Key terminal commands
+```{r}
+help # some basic information
+
+ls # show all elements in directory
+ls -la # structure the content a bit more and also show hidden files (starting with a .)
+cd /Users # change directory to /Users
+cd Program # change the directory relative to the current directory
+cd .. # up the tree in the directory
+pwd # show working directory
+
+rm testfile.txt # remove a file
+rm -rf testfolder # -r for recursive force for removing folders
+
+mv testfile.txt subolder_x/movedtestfile.txt # move a file to a subfolder_x and rename it
+cp testfile.txt subolder_x/movedtestfile.txt # copy the file instead of moving it
+
+mkdir hithere # create new folder called "hithere"
+
+cat testfile.txt # display content
+head testfile.txt # display 10 first line
+tail testfile.txt # display last
+
+## some advanced stuff
+ls -ld -- */ # list all directories in the working directory
+grep "^df" *.do # search for a file starting with df among all files with a .do extension and list them.
+
+# you can combine options. The following is the same.
+git branch -v -a
+git branch -va
+git branch -a -v
+
+
+```
+### Interactive usage 
+```{r}
+# e.g. after
+git diff --help # displaying the git diff help file
+# you may press
+SPACE # to get to the next page
+b # to go one page back
+q # to get to the next page
+
+ctrl+a # get to the beginning of a code line 
+ctrl+f # get to the next letter in the code line
+ctrl+b # get to a letter back in the code line
+ctrl+e # get to the end of a code line 
+
+
+
+```
+### Auto completion
+**[TAB]**
+```{r}
+[TAB] #will autocomplete what you write if there is an object that matches up. 
+#instead of typing
+cd directory1/anotherdirectory 
+# you might want to type 
+cd di[TAB]/an[TAB] 
+```
+**[Star] \* **
+```{r}
+#you might want to use auto completion with the star (*).
+git add self* # instead of
+git add self_training.ado
+# if there are multiple matching objects they are all contained in the command
+
+
+```
+## Files to be ignored by git
+### If the file was not tracked so far 
+#### Basic 
+Explicitly list files/directories to be excluded from version control. This is the simplest and most used case.
+
+To specify which files you don't want to be tracked by git, create a file called `.gitignore` (no extension!) in the relevant directory in which all the file characteristics that identify files that should not be tracked are stored. You can create and open the file like this
+```{r}
+touch .gitignore # creates an empty file .gitignore
+open .gitignore # open the file with standard text editor, which is TextEdit
+```
+Now, within TextEdit, use one line per specification, for example:
+```{r}
+text1.txt # uniquely identifies the file text1 not to be tracked by git
+*.txt # track no txt files
+a/path/to/* # all files in a certain subdirectory
+```
+Save the file and close the window. All files starting with a dot are system files and can't bee seen by the user in the Finder. You may see them if you type `ls -la` on the command line. If you just want to see the content of the file printed on the console, type `cat .gitignore`.
+
+#### Advanced
+Instead of providing a list with files to **ignore**, you might want to include a list of files to **include**. Then there is two cases. \
+\
+**The file is the git directory** \
+This is the easier case. Simply add the files not to be tracked precending an exclamation mark. E.g if you don't want to ignore everything except for .Rmd files in the directory. write the following in your `.ignore` file:
+```{r}
+./* # ignore everything
+!*.R # but .R files
+```
+**The file is the a git subdirectory** \
+In this case, you have to manually include every directory that is a parent directory of what you want to include. For example, if you want to *unignore* (that is, add to git version control) all `.R` and `.Rmd` files in the subdirectory `r-project` in the folder `code` but nothing else, you have to go like this
+```{r}
+r-project/* # exclude the folder r-project
+!r-project/code/ # but include the subdirectory code
+
+r-project/code/* # exclude the folder, but ...
+!r-project/code/*.R # not .R files
+!r-project/code/*.Rmd # not .Rmd files
+```
+Note from Stackoverflow: The trailing /\* is significant:
+
+* The pattern dir/ excludes a directory named dir and (implicitly) everything under it.
+With dir/, Git will never look at anything under dir, and thus will never apply any of the “un-exclude” patterns to anything under dir.
+* The pattern dir/\* says nothing about dir itself; it just excludes everything under dir. With dir/\*, Git will process the direct contents of dir, giving other patterns a chance to “un-exclude” some bit of the content (!dir/sub/).
+
+### If the file was previously tracked
+This basically involves removing a file from the version control but keep the checked out version in the local repository.
+```{r}
+git rm text.txt --cached # or rm -- cached text.txt
+```
+Now the file is added to the list "Untracked files", but still in the local repo. Now, you can add the file to your `.gitignore` file.
+
+## Stagging area
+#### Basics
+```{r}
+git init # initialize a repository
+git status # show the status of files
+git add text1.txt # add textfile text1 to the stagging area
+```
+#### Advanced
+```{r}
+git reset HEAD text1.txt # remove textfile text1 to the stagging area
+git add -A # add all unstagged files in working directory to stagging area
+git add t* # add all files in the directory that start with t
+git ls-files # show files tracked by git
+```
+#### Renaming files
+If you want to rename a file, you have multiple options: \
+\
+**Rename the file in the finder** \
+Although straight forward, this method has a fundamental disadvantage: git won't recognize this file as the pre-reamed version of the file easyily, so it thinks of it as a new file, whereas the old one has been deleted. Hence, you loose all the history if you decide to go for this option. \
+\
+**Rename the file from the commandline** \
+An alternative is to use `git mv oldname newname` to avoid the problem described above. git will recognize the file as *renamed*, as you can see with `git status`.
+```{r}
+git rename 01-preprocessing.do 01a-preprocessing_mainform.do # rename without move or
+git rename 01-prepcoressing.do ./01-code/01-prepcoressing.do # ... only moving, not renaming
+```
+After having committed the renaming, the changes are tracked, but by default, not shown, since the file has a different name now. To show the changes, we need to add the option `-- follow 01-preprocessing.do`. Note that this is the old name in the old directory.
+```{r}
+git log ./01-code/01-prepcoressing.do # won't list any commits since nothing committed after renaming
+git log -- follow ./01-prepcoressing.do # won't list any commits since nothing committed after renaming
+```
+However, keep in mind that renaming should be avoiding when other people use your code because all references to it will be invalid, which means it can break even old versions.
+
+## Committing
+#### Basics
+```{r}
+git commit -m "hi this is a commit" # commiting stagged commits to current branch
+git checkout -- text1.txt # dischard local changes for text1.txt and set local back to HEAD (the latest commit)
+```
+#### Advanced
+```{r}
+git commit -a -m "all files" # commit all unstagged changes of tracked files in the directory 
+git commit --amend -m "this is actually the correct message" # change the message for the latest commit
+git commit --amend -m "new message new file" # works only if you added files to the stagging area. Adds these files to the latest commit and chnages the message.
+git commit --amend -m "" # add stagged changes to latest commit without changing message
+```
+## cloning a repo
+You might want to join an existing project and get a local copy from a remote repository in an URL. Some repos might be protected with password. Not the one below.
+```{r}
+git clone https://github.com/gittower/git-crash-course.git # clone example repo
+```
+
+
+## Working with branches
+### show, create, delete and rename barnches
+```{r}
+git branch # show all branches (green star shows current branch)
+git branch -v # show all branches (green star shows current branch) and some additonal information
+
+git branch coffee # create a new branch "coffee"
+git branch -d coffee # delete the coffee branch
+git branch -m A_hotfixDropdown # rename the current bracht to A_hotfixDropdown
+```
+### Switching branches 
+```{r}
+git checkout # dischard changes in stagging area.
+git checkout coffee # switch to the coffee branch
+git checkout -b old-project-state 0ad5a7a6 # create a new branch called old-roject-state that is the current branch state at commit 0ad5a7a6 
+```
+### Merging 
+As soon as you are done with your work, merge the changes back to `master`. Imagine the following scenario:
+
+* You have a clean branch `master`
+* You branch out to fix an issue with creating a new branch `hotfix_212` with `git checkout -b hotfix_212`
+* You are done with the fix and want to merge back.
+* In the meanwhile, you changed some code lines in `master` as well. 
+* You committed all your changes in both `hotfix_212` and `master`
+
+**Case 1: No conflicts** \
+The easy case, where you don't have conflicts between the branches (i.e. you did not change the same line of code in both branches, which you can check with `git diff master..hotfix_212`) has the following workflow.
+```{r}
+git checkout master # switch to the master branch
+git merge hotfix_212 # select the branch you want to merge into master.
+git branch -d hotfix_212 # after you are certain that everything works.
+```
+
+
+**Case 2: Conflicting changes** \
+It gets a bit more tricky if you have deleted one file in one of the branches or if you changed the same line of code in both branches. However, start the same way.
+```{r}
+git checkout master # switch to the master branch
+git merge hotfix_212 # select the branch you want to merge into master.
+```
+Now, git will tell you that there is a conflict, so the merge is put on hold. Open the file of conflict (eg `conffile.txt`) and you will see that git separated the conflicting sections with >>>>>>>>>>>>>>>>>>> and >>>>>>>>>>. Resolve the conflicts by rewriting tose lines and finally get rid of the markers. Add the file to the stagging area and commit the changes as usual. This will complete the merge.
+```{r}
+git add conffile.txt
+git commit -m "Merge conflict solved for conffile"
+# now your merge is completed.
+git branch -d hotfix_212 # after you are certain that everything works.
+```
+If you want to undo a merge whilst you are in the middle of it, just use 
+```{r}
+git merge --abort  
+```
+If you already finished the merge but wish to undo it, simply restore the commit on the master branch before the merge, e.g. However, you need to have the branch `hotfix_212` still so you can also recover this version.
+```{r}
+git checkout master
+git revert dsf0840sdlkj --hard
+``` 
+to restore a given hash.
+
+
+## Undo things 
+### Go back to a previous version in the git repo
+If you deleted a file in version control, please refer to the paragraph *recover deleted files*.
+
+**Create a new branch**
+
+The best way to restore a previous stage is probably just by creating a new branch with that stage indicated with a hashtag.
+```{r}
+git checkout -b 123keri5
+```
+**Revert**
+
+Use `revert` to create a new downstream commit that is equal to a previous (upstram) commit. You are NOT destroying anything.
+```{r}
+git revert 123keri5 # create a new commit equal to the hash of a previous commit.
+```
+**Reset**
+
+Use `reset` to go back to a previous commit and delete all commits between the latest commit and the one you want to go back to.
+```{r}
+git reset --hard 123keri5 # create a new commit equal to the hash of a previous commit.
+```
+### Recover deleted files or deleting files
+In contrast to the situation where one wants to restore a previous version from git, having deleted a file from git does not easily allow to restore it, since it is no longer tracked.
+Imagine the following situation: 
+
+* your file `example.txt` was tracked by git.
+* you decided to move the file into the folder `example`. The file is no longer in the original directory.
+* now, you type `git status`and it says "deleted: .." in red, meaning that it is not yet stagged.
+* type `git checkout -- example.txt` to discard the removal and restore HEAD.
+* on the other hand, if you want to confirm the removal, type `git rm example.txt`. Note that, if you want to remove a whole directory, you will need the `-r`flag as a double check.
+* Now, after typing `git status` the "deleted: ..." is displayed in green, saying that changes are stagged.
+* To go back, you might type `git reset HEAD` (to unstage) and then `git checkout -- example.txt` to restore everything.
+
+## Inspecting differences
+### Changes between tracked files
+####`git log`
+`git log` shows a log book with all commits
+```{r}
+git log  # show the log / history of the git repository
+git log -p -2 # show the patch (the difference to the latest revision), and only show first 3 entries
+git log --stat # gives statistics such as number of changed line and changed fils
+git log --pretty=oneline # one commit per line. Helpful to look trough a lot of commits.
+```
+#### `git diff`
+`git diff` is designed to highlight changes between two revisions or arbitrary commits or files. \
+**between HEAD and uncommitted changes**
+```{r}
+git diff # inspect differences between HEAD and local file (= unstagged changes).
+git diff --cached # inspect differences between HEAD and INDEX (= stagged changes).
+git diff --word-diff # instead of higlighting a whole line when a character has changed, we only hihglight words that have changed.
+```
+**between committed revisions**
+```{r}
+git diff HEAD~2 HEAD # difference between current HEAD and the one two commits ago.
+git diff HEAD~2 HEAD -- text1.txt # difference between current HEAD and the one two committs ago for text1.txt
+git diff HEAD^ HEAD ## difference between current HEAD and the one a commit ago.
+git diff HEAD^^ HEAD --name-only ## displays names (not actual difference) for changed files between two revisions
+git diff HEAD^^ HEAD -G"gen" --name-only ##  show the names of the files where "gen" has been added or removed since the last 2 commits.
+git diff HEAD~2 HEAD -G"csv" # for the latest two commits that involved changing "csv" highlight all changes. 
+git diff HEAD~2 HEAD --word-diff="plain" # only highlight changed words, not lines.  Plain is the default for word-diff. Differences are indicated using a plus and a minus and color.
+git diff HEAD~2 HEAD --word-diff="color" # only highlight changed words, not lines. No plus / minus, only color.
+
+git diff HEAD~2 HEAD --color-words # same as the one above. Highlight changed words.
+git diff HEAD~2 HEAD --color-words="GX." text1.txt # Now, only highlight changed words if they meet regular expression (eg. GX7). Not all words matching the regex are highlighted (otherwise it would not be very helpful), but only the ones that changed from the second latest revision to the latest.
+
+
+```
+
+**between branches** \
+```{r}
+git diff master..branch1 # inspect all the differences between HEAD oftwo branches (master and branches).
+git diff master branch1 # same as above
+
+git diff master..branch1 -- text1.txt # inspect the differences between two branches (master and branch1) for a specific file
+git diff master...branch1 # inspect all the changes that have occured since branch 1 was created from master.
+
+```
+
+### Differnces between untracked files
+to inspect two files and see thir difference, you can also use git. The respective files don't even have to be tracked by git.
+```{r}
+git diff --no-index a.do b.do # compare the two files a.do and b.do in the working directory.
+
+```
+
+## Tagging 
+Tags can be used to create a reference to a certain stage of the directory, which we can think of as verisons. There are two kinds of tags:
+
+* lightweith tags are simple tags.
+* Annotated tags are tags with attributes (such as author, tagging message and so on.
+
+In contrast to hashes that refer to a commit on the tree of a file, tags typically refer to more than one file. For example if three files make up a functioning suite, then once all three work fine together, we might want to tag the bundle of all current versions of the three files and be able to restore them all togehter very easily. 
+```{r}
+git tag # list all tags
+git tag -l -n9 v3* # list all tags starting with v3 and the first 9 lines of comment
+git tag v1.0 # create a lightweith tag for the current HEAD.
+git tag -a v1.0 -m "this is my version 1" # create annotated tag with message.
+git tag -d -- v1.2  #remove the tag v1.2
+git checkout tag v.10 # replacing tracked files in working directory with their state when tag v1.0 was set. Since more than one file involved, this will result in a situation where the files are 'detached' from HEAD and where we are not on branch. If we want to continue working with v1.0 (e.g. for a hotfix) we shold probably create a new branch with v1.0, e.g by typing
+git checkout -b v1.0_hotfix
+
+git checkout master # switch to the latest HEAD of the branch master and discard potential changes made since reverted v1.0.
+
+```
+## Remote Repositories
+### Cloned Repository
+#### Get the repository
+If the code you want to work with is in a remote repository, you need to get a local copy before you can start. Here, we juse a repository called `a_git_test_folder`.
+```{r}
+git clone https://github.com/lorwal/a_git_test_folder.git # download a copy of the current code at github
+cd a_git_test_folder # change your working directory into this folder
+```
+#### Inspect the repository
+Let's now look at the branches in this git repository. The first two commands were introduced in this text further above.
+```{r}
+git branch # list you the (local) branches 
+git branch -v # displays the latest commit message along the branch
+git branch -va # displays all branches, that is, also remote branches that are stored localy
+```
+From looking at the terminal output, you can see that 
+
+* remote branches have a name starting with `remotes`.
+* by default, the cloned repository is called `origin`. `origin` is actually just a placeholder for the full url where the repository originates from. we can give this repository an arbitrary name.
+* our cloned repository has different branches. These are the branches available:
+    + all the branches in the remote branch
+    + a branch called HEAD, which is a pointer to the branch that is the current remote head 
+* remote branches are displayed in red when coloring is enabled 
+
+In contrast to what you saw before, this repository is "connected" to the remote repository. This is also visible when typing `git status`, where you will see more information than if it was an "unconnected" local repository. The added information for now here is that your local branch master is up to date with the remote repository *origin/master*.
+
+To see the remote "connections", type the following command is your friend.
+```{r}
+git remote -v # show what origin points to
+```
+There are always two directions of a remote repository, one is the one where you fetch (download) code from, the other one is where you push (upload) your committed work. In simple settings, the two are the same. You can also add new remote commections like this:
+```{r}
+git remote add alternativeorigin https://github.com/lorwal/a_git_test_folder_alternative.git
+```
+#### Use other than the master branch locally.
+By default, you will be on the master branch. However, you might want to wok on a different branch. All other remote branches that are shown with `git remote -va` are not local copies. To generate local copies, simply use 
+```{r}
+git checkout --track feature2 
+```
+To create a local copy of the remote branch feature2. The `track` option means that git tracks how the remote branch and the local branch differ, e.g. when using `git status`. Such a relationship between the local and remote master is established automatically with `git clone`. This tracking relationship also allows us to use `git fetch`, `git pull` and `git push` without further instructions. This is in most cases the desired behaviour.
+
+#### Push new local branch
+Assume you branched out for a new feature (feature3) locally, and you want to push the changes to github. If you want to push an entire branch that does not yet exist in the remote repository, a simple `git push` will fail. To add the branch as a new remote branch, use
+```{r}
+git push --set-upstream origin feature3
+```
+If you intend to merge this new banch with another branch at github, go to github and open a pull request. The owner of the repository can then decide when to merge the proposed branches on github.
+Alternatively, you can merge them locally and then push to the final branch, e.g. merge with `master` before you push to the master branch.
+
+### Workflow 
+#### Basics
+The basic workflow is as follows: 
+
+* you clone a repository before you start (as we just did)
+* you commit changes to the local repository 
+* you use `git push` (or an explicit form, e.g. `git push origin master` to push the master branch to the corresponding remote branch). Just before you push your changes, you local branch is "ahead" of the remote branch if the remote branch was not modified since you cloned it. If we work on the master branch and make one commit, our local branch will be "ahead of origin/master by 1 commit", as you can read when you type `git status`.
+* If other people are contributing, then your previously cloned repository gets out of date. You have to download the latest version of the remote repository, inspect changes and merge them with your repository before you can push them to the remote repository. Use `git fetch` to update the copy of the remote repository on your local disc. You can use tools like `git diff` or `git log` to compare the versions. At that stage, your local (unmodified) copy is said to be "behind" the remote repository. If you are ready to merge the cahnges, use `git merge` to merge the copy of the up-to-date remote and your changes made based on the old version of the remote. `git pull` is the fast way to do that: It executes the fetching and merging in one step. 
+* Note that you cannot push code if it is based on an out-of-date repository. 
+
+#### Advanced
