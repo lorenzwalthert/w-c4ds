@@ -34,8 +34,9 @@ mkdir hithere # create new folder called "hithere"
 cat testfile.txt # display content
 head testfile.txt # display 10 first line
 tail testfile.txt # display last
-
-## some advanced stuff
+```
+#### some advanced stuff
+```{r}
 ls -ld -- */ # list all directories in the working directory
 grep "^df" *.do # search for a file starting with df among all files with a .do extension and list them.
 
@@ -44,7 +45,19 @@ git branch -v -a
 git branch -va
 git branch -a -v
 
+# the find function
+find [path] [what to do]
+find ~/ -name "vorschau2.pdf" # find file with the name "vorschau2.pdf"
 
+find . -print # in current directory and below, show all file names
+find . -newer vorschaut.pds -print # in current directory and below, show all file names
+
+find / -name "*.doc" -print # in root directory (and below), take the files that match "*.doc" and print them
+
+
+# copy a whole directory structure without the files
+find ./SEPU -type d -exec mkdir -p ./SEPU_copy/{} \; # within subdirectory SEPU, 
+# find files of type directory and execute: mkdir [path]
 ```
 ### Interactive usage 
 ```{r}
@@ -172,10 +185,23 @@ git checkout -- text1.txt # dischard local changes for text1.txt and set local b
 ```
 #### Advanced
 ```{r}
+# skip stagging
 git commit -a -m "all files" # commit all unstagged changes of tracked files in the directory 
+
+# amend 
 git commit --amend -m "this is actually the correct message" # change the message for the latest commit
 git commit --amend -m "new message new file" # works only if you added files to the stagging area. Adds these files to the latest commit and chnages the message.
 git commit --amend -m "" # add stagged changes to latest commit without changing message
+
+# empty commit
+git commit --allow-emty -m "message" # create an empty commit
+
+# commit description
+git commit -m "Commit message" -m "Commit description" # add description to commit message
+
+# edit commit message in vis editor
+git commit # the editor opens: write yourmessage, hit ESC :wq (for write + quit) when you are done, :!q to exit without a message, i.e. to abort.
+
 ```
 ## cloning a repo
 You might want to join an existing project and get a local copy from a remote repository in an URL. Some repos might be protected with password. Not the one below.
