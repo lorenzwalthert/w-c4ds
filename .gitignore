@@ -2,3 +2,6 @@
 */.DS_Store
 *.Rhistory
 *.html
+*.pdf
+*.Rproj.user
+*.webloc
