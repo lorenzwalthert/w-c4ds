@@ -1,0 +1,29 @@
+---
+title: "Package creation"
+author: "Lorenz Walthert"
+date: "9 August 2016"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+```
+
+# attributes
+```{r}
+# comments
+x <- matrix(1:12, 3, 4)
+comment(x) <- c("This is my very important data from experiment #0234", "Jun 5, 1998")
+dimnames(x) <- list(c(letters[1:3]), sample(letters, 4))
+attributes(x) # show all attributes
+attr(x, "comment") # specify which = "comment"
+```
+
+# Classes
+## Formula
+```{r}
+data("swiss")
+mf <- model.frame(formula = Catholic ~ Agriculture + Infant.Mortality, data = swiss)
+x <- model.matrix(attr(mf, "tems"), mf)
+y <- model.response(mf)
+```
