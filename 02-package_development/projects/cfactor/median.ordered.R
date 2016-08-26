@@ -1,0 +1,1 @@
+median.ordered <- function(x) quantile(x, 0.5)
