@@ -13,6 +13,7 @@ output:
 ```{r setup, include=FALSE}
 source("projects/cfactor/cfactor.R")
 source("projects/cfactor/cut.integer.R")
+source("projects/cfactor/cut.ordered.R")
 source("projects/cfactor/median.ordered.R")
 source("projects/cfactor/quantile.ordered.R")
 
