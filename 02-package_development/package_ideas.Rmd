@@ -35,27 +35,26 @@ cfactor(string, levels = c("b", "c", "d"))
 ### detect levels
 `cfactor` should detect sequences in strings, and if existent, order the levels. The default behavior of`factor` is
 `factorx(x, levels = sort(unique(as.character(x)))`, which is fine if the string ordering is the same as ordering the numbers within the string.
+
+\
+**A simple example**
 ```{r}
 money <- c("EUR 11 - EUR 20","EUR 1 - EUR 10", "Eur 21 - EUR 22") # no issue, since all numbers are two digits
 factor(money, ordered = T) # correctly detects level
 
 money <- c("EUR 21 - EUR 22", "EUR 100 - 101", "EUR 1 - EUR 10", "EUR 11 - EUR 20")  # the general case
+cfactor(money, ordered = T) # cfactor detects levels using regular expressions
 ```
 
-```{r, eval = F}
-cfactor(money) # cfactor detects levels using regular expressions
+\
+**A more "dirty" example**
+```{r}
+dirty_money <- c("EUR 21 - EUR 22", "EUR 100 - 101", "EUR 11 bis EUR 20", "from 98 to 99")
+cfactor(dirty_money, ordered = T)
 ```
 
-```{r, echo = F}
-cat("[1] EUR 1 - EUR 10  EUR 11 - EUR 20 Eur 21 - EUR 22 \n Levels: EUR 1 - EUR 10 < EUR 11 - EUR 20 < EUR 21 - EUR 22
-", "EUR 100 - 101")
-```
-
-```{r, eval = F}
-# To conclude, the following should be equal:
-levels(cfactor(sample(money))) == levels(cfactor(money))
-```
-Other example strings
+\
+**Other example strings**
 ```{r, echo = F, include = T}
 c(" 1 to 4", " 5 to 6") # properly separated
 c(" 1 to 4", " 4 to 6") # not properly separated
@@ -64,6 +63,16 @@ c("4.0 / 4.1", "4.2 / 4.3") # point and slash separator
 c("one minute", "three minutes", "1 hour")
 ```
 
+### cleaning factor levels
+Making separation conventions uniform when the factor is created. The particular cleaning specification is supplied as a list to the argument cleaning. Its elements contain are either
+
+* a vector with mandantory elements `from` and `to`, e.g. to specify that dots and comas shold be represented as dots.
+* or vector of length one speficying an option, e.g. to convert all letters to upper or lower.
+
+```{r}
+formals(cfactor)$cleaning # not yet implemented
+
+```
 
 ### boundary labels for integer bins
 using `cut` gives boundaries like [50, 55) [55, 60), even for integers. This is undesired in the case of integer values, so it should give boundaries like "50 - 55", "56 - 60". Possibly with the spacing being optional.
