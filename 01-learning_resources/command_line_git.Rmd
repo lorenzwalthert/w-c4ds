@@ -411,7 +411,8 @@ git tag -l -n9 v3* # list all tags starting with v3 and the first 9 lines of com
 
 # create tags  
 git tag v1.0 # create a lightweith tag for the current HEAD.
-git tag -a v1.0 -m "this is my version 1" # create annotated tag with message.
+git tag -a v1.0 -m "this is my version 1" # create annotated tag with message at HEAD
+git tag -a v0.0.9000 -m "tag retrospective"  e4063df8558b77ba6927cbc45438cfa119b0b34b # create an annotated tag at an arbitrary hash
 
 # remove tags
 git tag -d -- v1.2  # remove the tag v1.2 locally 
