@@ -207,11 +207,11 @@ git checkout -- text1.txt # dischard local changes for text1.txt and set local b
 ```{r}
 # skip stagging
 git commit -a -m "all files" # commit all unstagged changes of tracked files in the directory 
-
+git commit * -m "all files" # the same
 # amend 
 git commit --amend -m "this is actually the correct message" # change the message for the latest commit
 git commit --amend -m "new message new file" # works only if you added files to the stagging area. Adds these files to the latest commit and chnages the message.
-git commit --amend -m "" # add stagged changes to latest commit without changing message
+git commit --amend --no-edit # add stagged changes to latest commit without changing message
 
 # empty commit
 git commit --allow-emty -m "message" # create an empty commit
@@ -333,6 +333,9 @@ git log -p -2 # show the patch (the difference to the latest revision), and only
 git log --stat # gives statistics such as number of changed line and changed fils
 git log --pretty=oneline # one commit per line. Helpful to look trough a lot of commits.
 ```
+On a side note, you can also see the whole list of git commands (not only commits) using `git reflog`. For example, if you switched from one branch to the other, it shows you where you switched *to*, but not where you switched *from*. So if you forgot the branch you are coming from, just type `git reflog` and you will be able to see a log of all commands and a comment.
+
+
 #### `git diff`
 `git diff` is designed to highlight changes between two revisions or arbitrary commits or files. \
 **between HEAD and uncommitted changes**
@@ -383,11 +386,31 @@ Tags can be used to create a reference to a certain stage of the directory, whic
 
 In contrast to hashes that refer to a commit on the tree of a file, tags typically refer to more than one file. For example if three files make up a functioning suite, then once all three work fine together, we might want to tag the bundle of all current versions of the three files and be able to restore them all togehter very easily. 
 ```{r}
+# pull tag. This happens by default with the following standard commands
+git pull
+git fetch
+
+# list tags
 git tag # list all tags
 git tag -l -n9 v3* # list all tags starting with v3 and the first 9 lines of comment
+
+# create tags  
 git tag v1.0 # create a lightweith tag for the current HEAD.
 git tag -a v1.0 -m "this is my version 1" # create annotated tag with message.
-git tag -d -- v1.2  #remove the tag v1.2
+
+# remove tags
+git tag -d -- v1.2  # remove the tag v1.2 locally 
+git push --delete origin v0.2.0.901 # remove remote tags using push(requires up-to-date branch (including tag references))
+
+# push tags
+## by default, tags are not pushed along with commits with git push. 
+git push --tags # To push commits and all tags 
+git push --follow-tags # To push commits and tags only if they are annotated and reachable (that is, from related branches)
+
+## to push specific tags, list them in after pus
+git push origin v1.0.1
+
+# revert
 git checkout tag v.10 # replacing tracked files in working directory with their state when tag v1.0 was set. Since more than one file involved, this will result in a situation where the files are 'detached' from HEAD and where we are not on branch. If we want to continue working with v1.0 (e.g. for a hotfix) we shold probably create a new branch with v1.0, e.g by typing
 git checkout -b v1.0_hotfix
 
