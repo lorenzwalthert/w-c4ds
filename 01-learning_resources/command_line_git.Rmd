@@ -232,7 +232,32 @@ git commit
 # are done, :!q to exit without a message, i.e. to abort.
 
 ```
-## cloning a repo
+
+#### Stashing
+Sometimes, you will find yourself working on something that is not yet ready to 
+commit, but then suddleny you got to work on something else (i.e. an urgent 
+bug-fix). In this case you want to save your current changes to a clipboard 
+without committing them yet. In this case, `git stash` will be your friend. It
+puts your changes aside and leaves you with a clean working directory.
+```{r}
+git stash # put changes aside
+git stash # nothing to commit
+```
+
+You can also get an list of you stashes, the top one being the most recently 
+added.
+```{r}
+git stash list
+```
+
+To get a stash back, you have multiple options
+```{r}
+git stash pop # restores latest stash and removes (!) it from your clipboard
+git stash apply <stashname> # same, but does NOT delete stash from the clipboard.
+```
+
+
+## Cloning 
 You might want to join an existing project and get a local copy from a remote repository in an URL. Some repos might be protected with password. Not the one below.
 ```{r}
 git clone https://github.com/gittower/git-crash-course.git # clone example repo
