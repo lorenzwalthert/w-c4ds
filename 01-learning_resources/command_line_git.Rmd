@@ -642,13 +642,19 @@ e.g. merge with `master` before you push to the master branch.
 The basic workflow is as follows: 
 
 * you clone a repository before you start (as we just did)
-* you commit changes to the local repository 
+* you commit changes to the local repository. 
+* Afert a few commits, the commits form a 'bundle' and you are ready to push.
+Maybe, just in time, you find something else you wan to change that actually 
+belongs to your latest commit. Use `--amend` and `no-edit` to modify the latest
+commit. This is only possible before you push.
 * you use `git push` (or an explicit form, e.g. `git push origin master` to 
-push the master branch to the corresponding remote branch). Just before you 
-push your changes, you local branch is "ahead" of the remote branch if the 
-remote branch was not modified since you cloned it. If we work on the master 
-branch and make one commit, our local branch will be "ahead of origin/master by 
-1 commit", as you can read when you type `git status`.
+push the master branch to the corresponding remote branch). Do not wait too 
+long with pushing to avoid merge conflicts with other people. You need to pull 
+the latest version before you push.Just before you push your changes, you local 
+branch is "ahead" of the remote branch if the remote branch was not modified 
+since you cloned it. If we work on the master branch and make one commit, our 
+local branch will be "ahead of origin/master by n commits", as you can read 
+when you type `git status`.
 * If other people are contributing, then your previously cloned repository gets 
 out of date. You have to download the latest version of the remote repository, 
 inspect changes and merge them with your repository before you can push them to 
