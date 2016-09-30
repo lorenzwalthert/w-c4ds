@@ -641,10 +641,10 @@ e.g. merge with `master` before you push to the master branch.
 #### Basics
 The basic workflow is as follows: 
 
-* you clone a repository before you start (as we just did)
+* you clone a repository before you start (as we just did).
 * you commit changes to the local repository. 
-* Afert a few commits, the commits form a 'bundle' and you are ready to push.
-Maybe, just in time, you find something else you wan to change that actually 
+* After a few commits, the commits form a 'bundle' and you are ready to push.
+Maybe, just in time, you find something else you want to change that actually 
 belongs to your latest commit. Use `--amend` and `no-edit` to modify the latest
 commit. This is only possible before you push.
 * you use `git push` (or an explicit form, e.g. `git push origin master` to 
