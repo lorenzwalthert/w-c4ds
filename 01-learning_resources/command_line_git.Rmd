@@ -412,8 +412,16 @@ git log  # show the log / history of the git repository
 # show the patch (the difference to the latest revision), and only show first 3 entries
 git log -p -2
 
+# layout
 git log --stat # gives statistics such as number of changed line and changed fils
 git log --pretty=oneline # one commit per line. Helpful to look trough a lot of commits.
+git log --name-only # gives you the names of the involved files as well
+
+# filtering the log
+git log --author=jonmcalder # only show commits from Jon
+# sohw all commits for which the message started with update or Update.
+git log --grep=^[Uu]pdate  
+git log -p --grep=^[Uu]pdate # also show the code changes
 ```
 On a side note, you can also see the whole list of git commands (not only 
 commits) using `git reflog`. For example, if you switched from one branch to 
