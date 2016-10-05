@@ -164,7 +164,7 @@ git rm text.txt --cached # or rm -- cached text.txt
 ```
 Now the file is added to the list "Untracked files", but still in the local repo. Now, you can add the file to your `.gitignore` file.
 
-## Stagging area
+## Staging area
 #### Basics
 ```{r}
 git init # initialize a repository
@@ -200,24 +200,24 @@ However, keep in mind that renaming should be avoiding when other people use you
 ## Committing
 #### Basics
 ```{r}
-git commit -m "hi this is a commit" # commiting stagged commits to current branch
+git commit -m "hi this is a commit" # commiting staged commits to current branch
 git checkout -- text1.txt # dischard local changes for text1.txt and set local back to HEAD (the latest commit)
 ```
 #### Advanced
 ```{r}
-# skip stagging
-git commit -a -m "all files" # commit all unstagged changes of tracked files in the directory 
+# skip staging
+git commit -a -m "all files" # commit all unstaged changes of tracked files in the directory 
 git commit * -m "all files" # the same
 
 # amend 
 # change the message for the latest commit
 git commit --amend -m "this is actually the correct message" 
 
-# the followign works only if you added files to the stagging area. Adds these 
+# the following only works if you have added files to the staging area. Adds these 
 # files to the latest commit and chnages the message.
 git commit --amend -m "new message new file"
 
-# add stagged changes to latest commit without changing message
+# add staged changes to latest commit without changing message
 git commit --amend --no-edit
 
 # empty commit
@@ -228,23 +228,23 @@ git commit -m "Commit message" -m "Commit description" # add description to comm
 
 # edit commit message in vis editor
 git commit 
-# the editor opens: write yourmessage, hit ESC :wq (for write + quit) when you 
+# the editor opens: write your message, hit ESC :wq (for write + quit) when you 
 # are done, :!q to exit without a message, i.e. to abort.
 
 ```
 
 #### Stashing
 Sometimes, you will find yourself working on something that is not yet ready to 
-commit, but then suddleny you got to work on something else (i.e. an urgent 
+commit, but then suddenly you need to work on something else (e.g. an urgent 
 bug-fix). In this case you want to save your current changes to a clipboard 
-without committing them yet. In this case, `git stash` will be your friend. It
+without committing them yet. In this case, `git stash` is your friend. It
 puts your changes aside and leaves you with a clean working directory.
 ```{r}
 git stash # put changes aside
 git stash # nothing to commit
 ```
 
-You can also get an list of you stashes, the top one being the most recently 
+You can also get a list of your stashes, the top one being the most recently 
 added.
 ```{r}
 git stash list
