@@ -422,6 +422,11 @@ git log --author=jonmcalder # only show commits from Jon
 # sohw all commits for which the message started with update or Update.
 git log --grep=^[Uu]pdate  
 git log -p --grep=^[Uu]pdate # also show the code changes
+# show all commits that were committed to the development branch but not (yet)
+# to the master branch. Note that for pull requests, Github shows you 
+# automatically the commits that differ from two branches.
+git log devel ^master --no-merges
+
 ```
 On a side note, you can also see the whole list of git commands (not only 
 commits) using `git reflog`. For example, if you switched from one branch to 
