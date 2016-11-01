@@ -333,7 +333,8 @@ If you want to undo a merge whilst you are in the middle of it, just use
 git merge --abort  
 ```
 If you already finished the merge but wish to undo it, simply restore the commit
-on the master branch before the merge, e.g. However, you need to have the branch `hotfix_212` still so you can also recover this version.
+on the master branch before the merge, e.g. However, you need to have the branch 
+`hotfix_212` still so you can also recover this version.
 ```{r}
 git checkout master
 git revert dsf0840sdlkj --hard
@@ -369,11 +370,22 @@ git checkout -b 123keri5
 ```
 **Revert**
 
-Use `revert` to create a new downstream commit that is equal to a previous 
+Use `revert` to create a new downstream commit that removes a specific
 (upstram) commit. You are NOT destroying anything.
 ```{r}
-git revert 123keri5 # create a new commit equal to the hash of a previous commit.
+git revert 123keri5 
 ```
+
+**Cherry-pick**
+
+In some sense, cherry-pick is the opposite of `git revert`. It allows you to 
+apply arbitrary commits from other branches to your current branch. You can also
+specify multiple commits at once.
+```{r}
+git cherrypick e14jd 3kg05 # apply two commits to our current branch
+```
+
+
 **Reset**
 
 Use `reset` to go back to a previous commit and delete all commits between the 
