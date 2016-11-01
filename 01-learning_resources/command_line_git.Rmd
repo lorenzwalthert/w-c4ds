@@ -58,6 +58,18 @@ find / -name "*.doc" -print # in root directory (and below), take the files that
 # copy a whole directory structure without the files
 find ./SEPU -type d -exec mkdir -p ./SEPU_copy/{} \; # within subdirectory SEPU, 
 # find files of type directory and execute: mkdir [path]
+
+
+
+
+
+##  ............................................................................
+##  count words, lines ect. in files
+wc # word, line, character and bite.
+wc -l untitled # get lines for the file untitled. 
+wc -w untitled # get lines for the file untitled. 
+#> 0 # if it has one line
+
 ```
 ### Interactive usage 
 ```{r}
