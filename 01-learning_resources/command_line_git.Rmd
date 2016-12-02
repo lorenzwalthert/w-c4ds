@@ -18,9 +18,16 @@ help # some basic information
 
 ls # show all elements in directory
 ls -la # structure the content a bit more and also show hidden files (starting with a .)
+ls -t # order according to the date.
+ls -rt # oder according to date, but in reverse order.
 cd /Users # change directory to /Users
 cd Program # change the directory relative to the current directory
 cd .. # up the tree in the directory
+cd # go to the home directory
+echo $PATH # show the environment variable Path
+echo $PATH > file # replace the content of the file with the path variable
+
+
 pwd # show working directory
 
 rm testfile.txt # remove a file
@@ -185,7 +192,13 @@ git add text1.txt # add textfile text1 to the stagging area
 ```
 #### Advanced
 ```{r}
-git reset HEAD text1.txt # remove textfile text1 to the stagging area
+git reset HEAD text1.txt # remove textfile text1 from the stagging area if it
+# was there
+git reset HEAD~1 --soft # remove the last commit from the index and add it 
+# to the stagging area (green text). No local changes until you do reset 
+# HEAD and checkout
+git reset HEAD~1 # remove the last commit from the index and don't add it 
+# to the stagging area (red text). No local changes until you check out
 git add -A # add all unstagged files in working directory to stagging area
 git add t* # add all files in the directory that start with t
 git ls-files # show files tracked by git
