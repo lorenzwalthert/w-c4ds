@@ -310,8 +310,7 @@ git checkout coffee # switch to the coffee branch
 # at commit 0ad5a7a6 
 git checkout -b old-project-state 0ad5a7a6 
 ```
-### Merging 
-#### A full branch
+## Integrating a full branch via merging
 As soon as you are done with your work, merge the changes back to `master`. 
 Imagine the following scenario:
 
@@ -322,7 +321,7 @@ Imagine the following scenario:
 * In the meanwhile, you changed some code lines in `master` as well. 
 * You committed all your changes in both `hotfix_212` and `master`
 
-**Case 1: No conflicts** \
+### Case 1: No conflicts
 The easy case, where you don't have conflicts between the branches (i.e. you did 
 not change the same line of code in both branches, which you can check with `git 
 diff master..hotfix_212`) has the following workflow.
@@ -333,7 +332,9 @@ git branch -d hotfix_212 # after you are certain that everything works.
 ```
 
 
-**Case 2: Conflicting changes** \
+### Case 2: Conflicting changes 
+
+#### Manual resolve 
 It gets a bit more tricky if you have deleted one file in one of the branches 
 or if you changed the same line of code in both branches. However, start the same 
 way.
@@ -342,9 +343,10 @@ git checkout master # switch to the master branch
 git merge hotfix_212 # select the branch you want to merge into master.
 ```
 Now, git will tell you that there is a conflict, so the merge is put on hold. 
-Open the file of conflict (eg `conffile.txt`) and you will see that git 
+Open the file of conflict (e.g. `conffile.txt`) and you will see that git 
 separated the conflicting sections with >>>>>>>>>>>>>>>>>>> and >>>>>>>>>>. 
-Resolve the conflicts by rewriting tose lines and finally get rid of the markers. 
+Resolve the conflicts by rewriting those lines and finally get rid of the markers.
+Alternatively, you can configure a merge tool like diffuse or diffmerge.
 Add the file to the stagging area and commit the changes as usual. This will 
 complete the merge.
 ```{r}
@@ -353,6 +355,65 @@ git commit -m "Merge conflict solved for conffile"
 # now your merge is completed.
 git branch -d hotfix_212 # after you are certain that everything works.
 ```
+
+#### Using merge strategies 
+Instead of resolving by hand, you can apply merge strategies and corresponding
+options. Strategies are specified with `-s`, options follow after `-X`.
+
+The default strategy for a merge is `recursive`. So `git merge -s recursive` is
+a verbose form of `git merge`. If we want to merge a branch into another and 
+we have conflicts (because some lines were changed in both branches) we can 
+specify options how to proceed. Two popular options are `ours` and `theirs`.
+Let's look at an example. We are done with a new feature on our branch 
+devel and we want to merge it into master. In the development process, a hotfix
+was committed to master, for which we accounted in devel already. Therefore, we
+anticipate that there will be conficts in the merge and that we want to use 
+the devel version whenever there are conflicts, since we already 
+accounted for the problems. We would proceed as follows: 
+```{r}
+git checkout master
+git merge devel -s recursive -X theirs # theirs refers to the other branch
+# equivalent
+git merge -s recursive -X theirs devel
+```
+We could also imagine a scenario where we want to merge changes from devel
+into master, but conflicts should be solved in favor of master
+```{r}
+git checkout master
+# favour our (the branch we are on) over the one we integrate
+git merge devel -s recursive -X ours 
+```
+Note that above area all *options* to the *strategy* recursive.
+Something you are less likely to want is to merge a branch
+into another but actually discarding all changes introduced by this other 
+branch. This would be the *ours* merge *strategy.* Suppose there is a 
+devel branch and it lead to nothing, you just want to "close" the branch and 
+merge it into master, without actually taking any commits from devel. You would
+do
+```{r}
+git checkout master
+git merge -s ours devel # reintegrate devel by not taking anything from it
+```
+
+Another use case is if you don't want to integrate all commits from devel 
+into master. Let's say you want to merge everything up to `head~3`, not
+`head~3` but all commits after `head~3` again. You could do the following:
+```{r}
+git checkout master
+git merge devel~4
+
+# next, mark devel~3 as integrated in master
+git merge devel~3 -s ours -m "not actual merge, skip commit xyz"
+# since devel~3 is marked as integrated, merging devel with master now
+# will merge devel~2/1/current.
+git merge devel
+```
+
+
+
+
+
+### Aborting a merge
 If you want to undo a merge whilst you are in the middle of it, just use 
 ```{r}
 git merge --abort  
@@ -366,7 +427,7 @@ git revert dsf0840sdlkj --hard
 ``` 
 to restore a given hash.
 
-#### Selected Files
+### Integrating selected files via checkout
 You can also just merge one file from branch x with branch y. However, this is 
 technically not merging, but you just checkout a version from a different branch
 in your target branch. Assuming you are in branch `devel` and you want to merge
