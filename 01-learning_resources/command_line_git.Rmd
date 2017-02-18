@@ -441,6 +441,66 @@ git diff --cached # to see stagged chagnes
 git commit files/reduce.R -m "adapt fixing if statement from devel"
 ```
 
+## Rebase
+### Changing the order of commits
+
+You can change the order of commits. Have a look at the recent history using
+`git log --pretty=oneline`. 
+```{r}
+a931ac7c808e2471b22b5bd20f0cad046b1c5d0d c
+b76d157d507e819d7511132bdb5a80dd421d854f b
+df239176e1a2ffac927d8b496ea00d5488481db5 a
+```
+Where a is the first commit, and c the last one.
+
+Using `git rebase --interactive HEAD~2`, an interactive window opens. Note that 
+now, going down the list means going from old to newer commits (unilke above).
+```{r}
+pick b76d157 b
+pick a931ac7 c
+
+# Rebase df23917..a931ac7 onto df23917
+#
+# Commands:
+#  p, pick = use commit
+#  r, reword = use commit, but edit the commit message
+#  e, edit = use commit, but stop for amending
+#  s, squash = use commit, but meld into previous commit
+#  f, fixup = like "squash", but discard this commit's log message
+#
+# If you remove a line here THAT COMMIT WILL BE LOST.
+# However, if you remove everything, the rebase will be aborted.
+#
+```
+You can now change the order of the commits by c/p the second line (commit c)
+to the top and save and exit.
+
+### Squashing commits
+
+This refers to merging multiple commits into one. Again, use `git rebase -i` as
+a starting point. First, reanrange the commits as described above. Squashing 
+means merging multiple commits into one. Say, if you wanted to squash commit 
+c into b, you had to change the following:
+```{r}
+pick b76d157 b
+squash a931ac7 c
+```
+Read this from top to bottom: 
+Hence, first commit b is picked (applied to the code base), then commit c is 
+added on top of it to form one commit with b. Finally, you get to rewrite the 
+commit message:
+```{r}
+# This is a combination of 2 commits.
+# The first commit's message is:
+
+b
+
+# This is the 2nd commit message:
+
+c
+
+```
+
 
 ## Undo things 
 ### Go back to a previous version in the git repo
