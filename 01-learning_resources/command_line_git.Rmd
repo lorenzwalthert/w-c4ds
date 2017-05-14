@@ -3,10 +3,13 @@ title: "Using git"
 author: "Lorenz Walthert"
 date: "13. Mai 2016"
 output:
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
   html_document:
-    toc: true
+    toc: yes
     toc_depth: 4
-    toc_float: true
+    toc_float: yes
 ---
 ```{r, global_options,include=F}
 knitr::opts_chunk$set(eval = F) # disable eval
@@ -42,6 +45,7 @@ cat testfile.txt # display content
 head testfile.txt # display 10 first line
 tail testfile.txt # display last
 ```
+
 #### some advanced stuff
 ```{r}
 ls -ld -- */ # list all directories in the working directory
@@ -84,6 +88,7 @@ wc -w untitled # get lines for the file untitled.
 #> 0 # if it has one line
 
 ```
+
 ### Interactive usage 
 ```{r}
 # e.g. after
@@ -101,6 +106,7 @@ ctrl+e # get to the end of a code line
 
 
 ```
+
 ### Auto completion
 **[TAB]**
 ```{r}
@@ -115,7 +121,8 @@ cd di[TAB]/an[TAB]
 # you can save a lot of typing by using the tab, since you can ge to this directory by typing
 1 [TAB] 1 [TAB] 3 [TAB]
 ```
-**[Stars] \* & \*\* **
+
+**[Stars] \\* & \\*\\* **
 ```{r}
 # you might want to use auto completion with the star (*). It can be leading or trailing:
 
@@ -507,6 +514,22 @@ c
 
 ```
 
+
+
+### integrate upstream changes
+Lets assume there is a repo on GitHub you want to contribute to. Since you cannot push
+directly to it, you need to create a fork (on GitHub) first, clone this fork
+to your machine and commit your changes to the fork, push and then submit a pull 
+request. Let us assume you are done with your changes and you pushed to the 
+fork but then you can't merge with the upstream because in the meantime 
+(i.e. after you forked until now) there were some other people comitting to
+the upstream branch and your fork is out of date. You can rebase your fork onto
+the upstream, i.e. apply all commits that the upstream is ahead of your fork 
+to the fork and then, on the tip of this tree, apply your commits. 
+```{r}
+git pull --rebase # or to be explicit
+git pull --rebase <remote name> <branch name>
+```
 
 ## Undo things 
 ### Go back to a previous version in the git repo
