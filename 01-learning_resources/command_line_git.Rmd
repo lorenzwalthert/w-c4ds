@@ -45,8 +45,14 @@ tail testfile.txt # display last
 #### some advanced stuff
 ```{r}
 ls -ld -- */ # list all directories in the working directory
+ls -a # list all 
+ls -l # list in long format
+ls -t # sort by time
+ls -rt # reverse order.
 grep "^df" *.do # search for a file starting with df among all files with a .do extension and list them.
-
+grep -r "^op" . # search for files that have a line starting with op and do that
+# recursively for all directoryies below current working directory and show content
+grep -r -l "^op" . # only list the names of the file, don't show the content
 # you can combine options. The following is the same.
 git branch -v -a
 git branch -va
@@ -808,8 +814,19 @@ when to merge the proposed branches on github.
 Alternatively, you can merge them locally and then push to the final branch, 
 e.g. merge with `master` before you push to the master branch.
 
-### Workflow 
-#### Basics
+
+## Configuring
+
+You got global git configurations saved in `~/yourusername/.gitconfig`.
+They can be altered using `git config --global your_command`.
+On the other hand, you can also set config options in a given directory - 
+without the global option. These configurations will then only apply to this
+folder.
+See [this link](http://stackoverflow.com/questions/4220416/can-i-specify-multiple-users-for-myself-in-gitconfig] for an extensive discussion.
+
+## Workflow 
+
+### Basics
 The basic workflow is as follows: 
 
 * you clone a repository before you start (as we just did).
@@ -838,4 +855,4 @@ based on the old version of the remote. `git pull` is the fast way to do that:
 It executes the fetching and merging in one step. 
 * Note that you cannot push code if it is based on an out-of-date repository. 
 
-#### Advanced
+### Advanced
