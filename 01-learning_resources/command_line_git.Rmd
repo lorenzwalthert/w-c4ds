@@ -15,6 +15,7 @@ output:
 knitr::opts_chunk$set(eval = F) # disable eval
 ```
 ## Basic Commandline navigation
+
 ### Key terminal commands
 ```{r}
 help # some basic information
@@ -29,7 +30,7 @@ cd .. # up the tree in the directory
 cd # go to the home directory
 echo $PATH # show the environment variable Path
 echo $PATH > file # replace the content of the file with the path variable
-
+echo $PATH >> file # append the path variable to the content of file
 
 pwd # show working directory
 
@@ -54,10 +55,7 @@ ls -a # list all
 ls -l # list in long format
 ls -t # sort by time
 ls -rt # reverse order.
-git branch -v -a
-git branch -va
-git branch -a -v
-
+top -o cpu # list all processes sort by CPU usage
 # the find function
 find [path] [what to do]
 find ~/ -name "vorschau2.pdf" # find file with the name "vorschau2.pdf"
@@ -341,11 +339,12 @@ git branch coffee # create a new branch "coffee"
 git branch -d coffee # delete the coffee branch
 git branch -m A_hotfixDropdown # rename the current bracht to A_hotfixDropdown
 ```
+
 ### Switching branches 
 ```{r}
 git checkout # dischard changes in stagging area.
 git checkout coffee # switch to the coffee branch
-
+git checkout - # switching to the last branch you were at
 # create a new branch called old-roject-state that is the current branch state 
 # at commit 0ad5a7a6 
 git checkout -b old-project-state 0ad5a7a6 
