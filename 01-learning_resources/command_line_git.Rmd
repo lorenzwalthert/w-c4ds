@@ -39,6 +39,8 @@ rm -rf testfolder # -r for recursive force for removing folders
 
 mv testfile.txt subolder_x/movedtestfile.txt # move a file to a subfolder_x and rename it
 cp testfile.txt subolder_x/movedtestfile.txt # copy the file instead of moving it
+cp test-a test-b # put the folder tes-a into test-b
+cp -r test-a test-b # copy all *contents* of test-a into test-b
 
 mkdir hithere # create new folder called "hithere"
 
