@@ -17,7 +17,7 @@ knitr::opts_chunk$set(eval = F) # disable eval
 ## Basic Commandline navigation
 
 ### Key terminal commands
-```{r}
+```{bash}
 help # some basic information
 
 ls # show all elements in directory
@@ -51,7 +51,7 @@ tail testfile.txt # display last
 
 #### some advanced stuff
 *general*
-```{r}
+```{bash}
 ls -ld -- */ # list all directories in the working directory
 ls -a # list all 
 ls -l # list in long format
@@ -86,7 +86,7 @@ wc -w untitled # get words for the file untitled.
 ```
 
 *regex*
-```{r}
+```{bash}
 
 ##  ............................................................................
 ##  search for stuff                                                        ####
@@ -106,9 +106,16 @@ perl -pi -w -e 's/add_ws_to_parse_data/enhance_parse_data/g;' **.R
 
 ```
 
+**links**
+
+You can create an alias (aka known as symbolic link) to an file or directory.
+```{bash, eval = FALSE}
+ln -s vim_test vim_symlink # create vim_symlink that points to vim_test
+```
+
 
 ### Interactive usage 
-```{r}
+```{bash}
 # e.g. after
 git diff --help # displaying the git diff help file
 # you may press
@@ -127,7 +134,7 @@ ctrl+e # get to the end of a code line
 
 ### Auto completion
 **[TAB]**
-```{r}
+```{bash}
 [TAB] #will autocomplete what you write if there is an object that matches up. 
 #instead of typing
 cd directory1/anotherdirectory 
@@ -141,7 +148,7 @@ cd di[TAB]/an[TAB]
 ```
 
 **[Stars] \\* & \\*\\* **
-```{r}
+```{bash}
 # you might want to use auto completion with the star (*). It can be leading or trailing:
 
 git add self* # instead of
@@ -170,12 +177,12 @@ Two consecutive asterisks ("**") in patterns matched against full pathname may h
 Explicitly list files/directories to be excluded from version control. This is the simplest and most used case.
 
 To specify which files you don't want to be tracked by git, create a file called `.gitignore` (no extension!) in the relevant directory in which all the file characteristics that identify files that should not be tracked are stored. You can create and open the file like this
-```{r}
+```{bash}
 touch .gitignore # creates an empty file .gitignore
 open .gitignore # open the file with standard text editor, which is TextEdit
 ```
 Now, within TextEdit, use one line per specification, for example:
-```{r}
+```{bash}
 text1.txt # uniquely identifies the file text1 not to be tracked by git
 *.txt # track no txt files
 a/path/to/* # all files in a certain subdirectory
@@ -187,13 +194,13 @@ Instead of providing a list with files to **ignore**, you might want to include 
 \
 **The file is the git directory** \
 This is the easier case. Simply add the files not to be tracked precending an exclamation mark. E.g if you don't want to ignore everything except for .Rmd files in the directory. write the following in your `.ignore` file:
-```{r}
+```{bash}
 ./* # ignore everything
 !*.R # but .R files
 ```
 **The file is the a git subdirectory** \
 In this case, you have to manually include every directory that is a parent directory of what you want to include. For example, if you want to *unignore* (that is, add to git version control) all `.R` and `.Rmd` files in the subdirectory `r-project` in the folder `code` but nothing else, you have to go like this
-```{r}
+```{bash}
 r-project/* # exclude the folder r-project
 !r-project/code/ # but include the subdirectory code
 
@@ -209,20 +216,20 @@ With dir/, Git will never look at anything under dir, and thus will never apply 
 
 ### If the file was previously tracked
 This basically involves removing a file from the version control but keep the checked out version in the local repository.
-```{r}
+```{bash}
 git rm text.txt --cached # or rm -- cached text.txt
 ```
 Now the file is added to the list "Untracked files", but still in the local repo. Now, you can add the file to your `.gitignore` file.
 
 ## Staging area
 #### Basics
-```{r}
+```{bash}
 git init # initialize a repository
 git status # show the status of files
 git add text1.txt # add textfile text1 to the stagging area
 ```
 #### Advanced
-```{r}
+```{bash}
 git reset HEAD text1.txt # remove textfile text1 from the stagging area if it
 # was there
 git reset HEAD~1 --soft # remove the last commit from the index and add it 
@@ -242,12 +249,12 @@ Although straight forward, this method has a fundamental disadvantage: git won't
 \
 **Rename the file from the commandline** \
 An alternative is to use `git mv oldname newname` to avoid the problem described above. git will recognize the file as *renamed*, as you can see with `git status`.
-```{r}
+```{bash}
 git mv 01-preprocessing.do 01a-preprocessing_mainform.do # rename without move or
 git mv 01-prepcoressing.do ./01-code/01-prepcoressing.do # ... only moving, not renaming
 ```
 After having committed the renaming, the changes are tracked, but by default, not shown, since the file has a different name now. To show the changes, we need to add the option `-- follow 01-preprocessing.do`. Note that this is the old name in the old directory.
-```{r}
+```{bash}
 git log ./01-code/01-prepcoressing.do # won't list any commits since nothing committed after renaming
 git log -- follow ./01-prepcoressing.do # won't list any commits since nothing committed after renaming
 ```
@@ -255,12 +262,12 @@ However, keep in mind that renaming should be avoiding when other people use you
 
 ## Committing
 #### Basics
-```{r}
+```{bash}
 git commit -m "hi this is a commit" # commiting staged commits to current branch
 git checkout -- text1.txt # dischard local changes for text1.txt and set local back to HEAD (the latest commit)
 ```
 #### Advanced
-```{r}
+```{bash}
 # skip staging
 git commit -a -m "all files" # commit all unstaged changes of tracked files in the directory 
 git commit * -m "all files" # the same
@@ -295,19 +302,19 @@ commit, but then suddenly you need to work on something else (e.g. an urgent
 bug-fix). In this case you want to save your current changes to a clipboard 
 without committing them yet. In this case, `git stash` is your friend. It
 puts your changes aside and leaves you with a clean working directory.
-```{r}
+```{bash}
 git stash # put changes aside
 git stash # nothing to commit
 ```
 
 You can also get a list of your stashes, the top one being the most recently 
 added.
-```{r}
+```{bash}
 git stash list
 ```
 
 To get a stash back, you have multiple options
-```{r}
+```{bash}
 git stash pop # restores latest stash and removes (!) it from your clipboard
 git stash apply <stashname> # same, but does NOT delete stash from the clipboard.
 ```
@@ -324,14 +331,14 @@ you want to stash to the stagging area with `git add file1 file1`.
 
 ## Cloning 
 You might want to join an existing project and get a local copy from a remote repository in an URL. Some repos might be protected with password. Not the one below.
-```{r}
+```{bash}
 git clone https://github.com/gittower/git-crash-course.git # clone example repo
 ```
 
 
 ## Working with branches
 ### show, create, delete and rename barnches
-```{r}
+```{bash}
 git branch # show all branches (green star shows current branch)
 
 # show all branches (green star shows current branch) and some additonal information
@@ -343,7 +350,7 @@ git branch -m A_hotfixDropdown # rename the current bracht to A_hotfixDropdown
 ```
 
 ### Switching branches 
-```{r}
+```{bash}
 git checkout # dischard changes in stagging area.
 git checkout coffee # switch to the coffee branch
 git checkout - # switching to the last branch you were at
@@ -366,7 +373,7 @@ Imagine the following scenario:
 The easy case, where you don't have conflicts between the branches (i.e. you did 
 not change the same line of code in both branches, which you can check with `git 
 diff master..hotfix_212`) has the following workflow.
-```{r}
+```{bash}
 git checkout master # switch to the master branch
 git merge hotfix_212 # select the branch you want to merge into master.
 git branch -d hotfix_212 # after you are certain that everything works.
@@ -379,7 +386,7 @@ git branch -d hotfix_212 # after you are certain that everything works.
 It gets a bit more tricky if you have deleted one file in one of the branches 
 or if you changed the same line of code in both branches. However, start the same 
 way.
-```{r}
+```{bash}
 git checkout master # switch to the master branch
 git merge hotfix_212 # select the branch you want to merge into master.
 ```
@@ -390,7 +397,7 @@ Resolve the conflicts by rewriting those lines and finally get rid of the marker
 Alternatively, you can configure a merge tool like diffuse or diffmerge.
 Add the file to the stagging area and commit the changes as usual. This will 
 complete the merge.
-```{r}
+```{bash}
 git add conffile.txt
 git commit -m "Merge conflict solved for conffile"
 # now your merge is completed.
@@ -411,7 +418,7 @@ was committed to master, for which we accounted in devel already. Therefore, we
 anticipate that there will be conficts in the merge and that we want to use 
 the devel version whenever there are conflicts, since we already 
 accounted for the problems. We would proceed as follows: 
-```{r}
+```{bash}
 git checkout master
 git merge devel -s recursive -X theirs # theirs refers to the other branch
 # equivalent
@@ -419,7 +426,7 @@ git merge -s recursive -X theirs devel
 ```
 We could also imagine a scenario where we want to merge changes from devel
 into master, but conflicts should be solved in favor of master
-```{r}
+```{bash}
 git checkout master
 # favour our (the branch we are on) over the one we integrate
 git merge devel -s recursive -X ours 
@@ -431,7 +438,7 @@ branch. This would be the *ours* merge *strategy.* Suppose there is a
 devel branch and it lead to nothing, you just want to "close" the branch and 
 merge it into master, without actually taking any commits from devel. You would
 do
-```{r}
+```{bash}
 git checkout master
 git merge -s ours devel # reintegrate devel by not taking anything from it
 ```
@@ -439,7 +446,7 @@ git merge -s ours devel # reintegrate devel by not taking anything from it
 Another use case is if you don't want to integrate all commits from devel 
 into master. Let's say you want to merge everything up to `head~3`, not
 `head~3` but all commits after `head~3` again. You could do the following:
-```{r}
+```{bash}
 git checkout master
 git merge devel~4
 
@@ -456,13 +463,13 @@ git merge devel
 
 ### Aborting a merge
 If you want to undo a merge whilst you are in the middle of it, just use 
-```{r}
+```{bash}
 git merge --abort  
 ```
 If you already finished the merge but wish to undo it, simply restore the commit
 on the master branch before the merge, e.g. However, you need to have the branch 
 `hotfix_212` still so you can also recover this version.
-```{r}
+```{bash}
 git checkout master
 git revert dsf0840sdlkj --hard
 ``` 
@@ -473,7 +480,7 @@ You can also just merge one file from branch x with branch y. However, this is
 technically not merging, but you just checkout a version from a different branch
 in your target branch. Assuming you are in branch `devel` and you want to merge
 the changes from the file `reduce.R` of this branch into `master`
-```{r}
+```{bash}
 git commit files/reduce.R -m "fix if statement" # on devel
 git checkout master
 git checkout devel files/reduce.R # git checkout source_branch <paths>...
@@ -487,7 +494,7 @@ git commit files/reduce.R -m "adapt fixing if statement from devel"
 
 You can change the order of commits. Have a look at the recent history using
 `git log --pretty=oneline`. 
-```{r}
+```{bash}
 a931ac7c808e2471b22b5bd20f0cad046b1c5d0d c
 b76d157d507e819d7511132bdb5a80dd421d854f b
 df239176e1a2ffac927d8b496ea00d5488481db5 a
@@ -496,7 +503,7 @@ Where a is the first commit, and c the last one.
 
 Using `git rebase --interactive HEAD~2`, an interactive window opens. Note that 
 now, going down the list means going from old to newer commits (unilke above).
-```{r}
+```{bash}
 pick b76d157 b
 pick a931ac7 c
 
@@ -522,7 +529,7 @@ This refers to merging multiple commits into one. Again, use `git rebase -i` as
 a starting point. First, reanrange the commits as described above. Squashing 
 means merging multiple commits into one. Say, if you wanted to squash commit 
 c into b, you had to change the following:
-```{r}
+```{bash}
 pick b76d157 b
 squash a931ac7 c
 ```
@@ -530,7 +537,7 @@ Read this from top to bottom:
 Hence, first commit b is picked (applied to the code base), then commit c is 
 added on top of it to form one commit with b. Finally, you get to rewrite the 
 commit message:
-```{r}
+```{bash}
 # This is a combination of 2 commits.
 # The first commit's message is:
 
@@ -554,7 +561,7 @@ fork but then you can't merge with the upstream because in the meantime
 the upstream branch and your fork is out of date. You can rebase your fork onto
 the upstream, i.e. apply all commits that the upstream is ahead of your fork 
 to the fork and then, on the tip of this tree, apply your commits. 
-```{r}
+```{bash}
 git pull --rebase # or to be explicit
 git pull --rebase <remote name> <branch name>
 ```
@@ -568,14 +575,14 @@ If you deleted a file in version control, please refer to the paragraph
 
 The best way to restore a previous stage is probably just by creating a new 
 branch with that stage indicated with a hashtag.
-```{r}
+```{bash}
 git checkout -b 123keri5
 ```
 **Revert**
 
 Use `revert` to create a new downstream commit that removes a specific
 (upstram) commit. You are NOT destroying anything.
-```{r}
+```{bash}
 git revert 123keri5 
 ```
 
@@ -584,7 +591,7 @@ git revert 123keri5
 In some sense, cherry-pick is the opposite of `git revert`. It allows you to 
 apply arbitrary commits from other branches to your current branch. You can also
 specify multiple commits at once.
-```{r}
+```{bash}
 git cherrypick e14jd 3kg05 # apply two commits to our current branch
 ```
 
@@ -593,7 +600,7 @@ git cherrypick e14jd 3kg05 # apply two commits to our current branch
 
 Use `reset` to go back to a previous commit and delete all commits between the 
 latest commit and the one you want to go back to.
-```{r}
+```{bash}
 # create a new commit equal to the hash of a previous commit.
 git reset --hard 123keri5 
 ```
@@ -621,7 +628,7 @@ saying that changes are stagged.
 ### Changes between tracked files
 ####`git log`
 `git log` shows a log book with all commits
-```{r}
+```{bash}
 git log  # show the log / history of the git repository
 
 # show the patch (the difference to the latest revision), and only show first 3 entries
@@ -653,7 +660,7 @@ and you will be able to see a log of all commands and a comment.
 `git diff` is designed to highlight changes between two revisions or arbitrary 
 commits or files. \
 **between HEAD and uncommitted changes**
-```{r}
+```{bash}
 git diff # inspect differences between HEAD and local file (= unstagged changes).
 git diff --cached # inspect differences between HEAD and INDEX (= stagged changes).
 
@@ -662,7 +669,7 @@ hihglight words that have changed.
 git diff --word-diff 
 ```
 **between committed revisions**
-```{r}
+```{bash}
 git diff HEAD~2 HEAD # difference between current HEAD and the one two commits ago.
 
 # difference between current HEAD and the one two committs ago for text1.txt
@@ -698,7 +705,7 @@ git diff HEAD~2 HEAD --color-words="GX." text1.txt
 ```
 
 **between branches** \
-```{r}
+```{bash}
 # inspect all the differences between HEAD oftwo branches (master and branches).
 git diff master..branch1 
 
@@ -716,7 +723,7 @@ git diff master...branch1
 ### Differnces between untracked files
 to inspect two files and see thir difference, you can also use git. The 
 respective files don't even have to be tracked by git.
-```{r}
+```{bash}
 # compare the two files a.do and b.do in the working directory.
 git diff --no-index a.do b.do
 ```
@@ -734,7 +741,7 @@ typically refer to more than one file. For example if three files make up a
 functioning suite, then once all three work fine together, we might want to tag 
 the bundle of all current versions of the three files and be able to restore 
 them all togehter very easily. 
-```{r}
+```{bash}
 # pull tag. This happens by default with the following standard commands
 git pull
 git fetch
@@ -794,7 +801,7 @@ git checkout master
 If the code you want to work with is in a remote repository, you need to get a 
 local copy before you can start. Here, we juse a repository called 
 `a_git_test_folder`.
-```{r}
+```{bash}
 # download a copy of the current code at github
 git clone https://github.com/lorwal/a_git_test_folder.git
 
@@ -803,7 +810,7 @@ cd a_git_test_folder # change your working directory into this folder
 #### Inspect the repository
 Let's now look at the branches in this git repository. The first two commands 
 were introduced in this text further above.
-```{r}
+```{bash}
 git branch # list you the (local) branches 
 git branch -v # displays the latest commit message along the branch
 
@@ -830,21 +837,21 @@ added information for now here is that your local branch master is up to date
 with the remote repository *origin/master*.
 
 To see the remote "connections", type the following command is your friend.
-```{r}
+```{bash}
 git remote -v # show what origin points to
 ```
 There are always two directions of a remote repository, one is the one where 
 you fetch (download) code from, the other one is where you push (upload) your 
 committed work. In simple settings, the two are the same. You can also add new 
 remote commections like this:
-```{r}
+```{bash}
 git remote add alternativeorigin https://github.com/lorwal/a_git_test_folder_alternative.git
 ```
 #### Use other than the master branch locally.
 By default, you will be on the master branch. However, you might want to wok on 
 a different branch. All other remote branches that are shown with 
 `git remote -va` are not local copies. To generate local copies, simply use 
-```{r}
+```{bash}
 git checkout --track feature2 
 ```
 To create a local copy of the remote branch feature2. The `track` option means 
@@ -859,7 +866,7 @@ Assume you branched out for a new feature (feature3) locally, and you want to
 push the changes to github. If you want to push an entire branch that does not 
 yet exist in the remote repository, a simple `git push` will fail. To add the 
 branch as a new remote branch, use
-```{r}
+```{bash}
 git push --set-upstream origin feature3
 ```
 If you intend to merge this new banch with another branch at github, go to 
