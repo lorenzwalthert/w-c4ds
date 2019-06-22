@@ -297,14 +297,21 @@ git commit
 ```
 
 #### Stashing
+
 Sometimes, you will find yourself working on something that is not yet ready to 
 commit, but then suddenly you need to work on something else (e.g. an urgent 
 bug-fix). In this case you want to save your current changes to a clipboard 
 without committing them yet. In this case, `git stash` is your friend. It
 puts your changes aside and leaves you with a clean working directory.
+
 ```{bash}
-git stash # put changes aside
-git stash # nothing to commit
+git stash # cut changes away
+git stash pop # paste last changes
+git stash pop stash stash@{1} # pop the second most recent 
+git stash save -m "message" # add dedicated meesage to stash
+git stash --include-untracked # to also temporarily remove untracked files
+git stash 
+
 ```
 
 You can also get a list of your stashes, the top one being the most recently 
