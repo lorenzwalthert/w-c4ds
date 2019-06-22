@@ -310,6 +310,9 @@ git stash pop # paste last changes
 git stash pop stash stash@{1} # pop the second most recent 
 git stash save -m "message" # add dedicated meesage to stash
 git stash --include-untracked # to also temporarily remove untracked files
+git stash -k # stash away files, but not the ones already staged (i.e. in the index)
+# or equivalently 
+git stash --keep-index
 git stash 
 
 ```
