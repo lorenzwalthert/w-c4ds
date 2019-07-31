@@ -15,9 +15,11 @@ output:
 ```{r, global_options,include=F}
 knitr::opts_chunk$set(eval = F) # disable eval
 ```
+
 ## Basic Commandline navigation
 
 ### Key terminal commands
+
 ```{bash}
 help # some basic information
 
@@ -51,7 +53,9 @@ tail testfile.txt # display last
 ```
 
 #### some advanced stuff
+
 *general*
+
 ```{bash}
 ls -ld -- */ # list all directories in the working directory
 ls -a # list all 
@@ -117,6 +121,7 @@ ln -s vim_test vim_symlink # create vim_symlink that points to vim_test
 ```
 
 ### Interactive usage 
+
 ```{bash}
 # e.g. after
 git diff --help # displaying the git diff help file
@@ -135,7 +140,9 @@ ctrl+e # get to the end of a code line
 ```
 
 ### Auto completion
+
 **[TAB]**
+
 ```{bash}
 [TAB] #will autocomplete what you write if there is an object that matches up. 
 #instead of typing
@@ -184,9 +191,13 @@ have special meaning:
 * Other consecutive asterisks are considered invalid.
 
 ## Files to be ignored by git
+
 ### If the file was not tracked so far 
+
 #### Basic 
-Explicitly list files/directories to be excluded from version control. This is the simplest and most used case.
+
+Explicitly list files/directories to be excluded from version control. This is
+the simplest and most used case.
 
 To specify which files you don't want to be tracked by git, create a file called
 `.gitignore` (no extension!) in the relevant directory in which all the file
@@ -197,25 +208,44 @@ can create and open the file like this
 touch .gitignore # creates an empty file .gitignore
 open .gitignore # open the file with standard text editor, which is TextEdit
 ```
+
 Now, within TextEdit, use one line per specification, for example:
+
 ```{bash}
 text1.txt # uniquely identifies the file text1 not to be tracked by git
 *.txt # track no txt files
 a/path/to/* # all files in a certain subdirectory
 ```
-Save the file and close the window. All files starting with a dot are system files and can't bee seen by the user in the Finder. You may see them if you type `ls -la` on the command line. If you just want to see the content of the file printed on the console, type `cat .gitignore`.
+
+Save the file and close the window. All files starting with a dot are system
+files and can't bee seen by the user in the Finder. You may see them if you type
+`ls -la` on the command line. If you just want to see the content of the file
+printed on the console, type `cat .gitignore`.
 
 #### Advanced
-Instead of providing a list with files to **ignore**, you might want to include a list of files to **include**. Then there is two cases. \
-\
-**The file is the git directory** \
-This is the easier case. Simply add the files not to be tracked precending an exclamation mark. E.g if you don't want to ignore everything except for .Rmd files in the directory. write the following in your `.ignore` file:
+
+Instead of providing a list with files to **ignore**, you might want to include
+a list of files to **include**. Then there is two cases.
+
+**The file is the git directory**
+
+This is the easier case. Simply add the files not to be tracked precending an
+exclamation mark. E.g if you don't want to ignore everything except for .Rmd
+files in the directory. write the following in your `.ignore` file:
+
 ```{bash}
 ./* # ignore everything
 !*.R # but .R files
 ```
-**The file is the a git subdirectory** \
-In this case, you have to manually include every directory that is a parent directory of what you want to include. For example, if you want to *unignore* (that is, add to git version control) all `.R` and `.Rmd` files in the subdirectory `r-project` in the folder `code` but nothing else, you have to go like this
+
+**The file is the a git subdirectory**
+
+In this case, you have to manually include every directory that is a parent
+directory of what you want to include. For example, if you want to *unignore*
+(that is, add to git version control) all `.R` and `.Rmd` files in the
+subdirectory `r-project` in the folder `code` but nothing else, you have to go
+like this
+
 ```{bash}
 r-project/* # exclude the folder r-project
 !r-project/code/ # but include the subdirectory code
@@ -224,6 +254,7 @@ r-project/code/* # exclude the folder, but ...
 !r-project/code/*.R # not .R files
 !r-project/code/*.Rmd # not .Rmd files
 ```
+
 Note from Stackoverflow: The trailing /\* is significant:
 
 * The pattern dir/ excludes a directory named dir and (implicitly) everything
@@ -235,20 +266,28 @@ Note from Stackoverflow: The trailing /\* is significant:
   other patterns a chance to “un-exclude” some bit of the content (!dir/sub/).
 
 ### If the file was previously tracked
-This basically involves removing a file from the version control but keep the checked out version in the local repository.
+
+This basically involves removing a file from the version control but keep the
+checked out version in the local repository.
+
 ```{bash}
 git rm text.txt --cached # or rm -- cached text.txt
 ```
+
 Now the file is added to the list "Untracked files", but still in the local repo. Now, you can add the file to your `.gitignore` file.
 
 ## Staging area
+
 #### Basics
+
 ```{bash}
 git init # initialize a repository
 git status # show the status of files
 git add text1.txt # add textfile text1 to the stagging area
 ```
+
 #### Advanced
+
 ```{bash}
 git reset HEAD text1.txt # remove textfile text1 from the stagging area if it
 # was there
@@ -261,32 +300,44 @@ git add -A # add all unstagged files in working directory to stagging area
 git add t* # add all files in the directory that start with t
 git ls-files # show files tracked by git
 ```
+
 #### Renaming files
-If you want to rename a file, you have multiple options: \
-\
-**Rename the file in the finder** \
-Although straight forward, this method has a fundamental disadvantage: git won't recognize this file as the pre-reamed version of the file easyily, so it thinks of it as a new file, whereas the old one has been deleted. Hence, you loose all the history if you decide to go for this option. \
-\
-**Rename the file from the commandline** \
+
+If you want to rename a file, you have multiple options:
+
+**Rename the file in the finder** 
+
+Although straight forward, this method has a fundamental disadvantage: git won't recognize this file as the pre-reamed version of the file easyily, so it thinks of it as a new file, whereas the old one has been deleted. Hence, you loose all the history if you decide to go for this option.
+
+**Rename the file from the commandline**
+
 An alternative is to use `git mv oldname newname` to avoid the problem described above. git will recognize the file as *renamed*, as you can see with `git status`.
+
 ```{bash}
 git mv 01-preprocessing.do 01a-preprocessing_mainform.do # rename without move or
 git mv 01-prepcoressing.do ./01-code/01-prepcoressing.do # ... only moving, not renaming
 ```
+
 After having committed the renaming, the changes are tracked, but by default, not shown, since the file has a different name now. To show the changes, we need to add the option `-- follow 01-preprocessing.do`. Note that this is the old name in the old directory.
+
 ```{bash}
 git log ./01-code/01-prepcoressing.do # won't list any commits since nothing committed after renaming
 git log -- follow ./01-prepcoressing.do # won't list any commits since nothing committed after renaming
 ```
+
 However, keep in mind that renaming should be avoiding when other people use your code because all references to it will be invalid, which means it can break even old versions.
 
 ## Committing
+
 #### Basics
+
 ```{bash}
 git commit -m "hi this is a commit" # commiting staged commits to current branch
 git checkout -- text1.txt # dischard local changes for text1.txt and set local back to HEAD (the latest commit)
 ```
+
 #### Advanced
+
 ```{bash}
 # skip staging
 git commit -a -m "all files" # commit all unstaged changes of tracked files in the directory 
@@ -841,20 +892,27 @@ git checkout -b v1.0_hotfix
 git checkout master
 ```
 ## Remote Repositories
+
 ### Cloned Repository
+
 #### Get the repository
-If the code you want to work with is in a remote repository, you need to get a 
-local copy before you can start. Here, we juse a repository called 
+
+If the code you want to work with is in a remote repository, you need to get a
+local copy before you can start. Here, we juse a repository called
 `a_git_test_folder`.
+
 ```{bash}
 # download a copy of the current code at github
 git clone https://github.com/lorwal/a_git_test_folder.git
 
 cd a_git_test_folder # change your working directory into this folder
 ```
+
 #### Inspect the repository
-Let's now look at the branches in this git repository. The first two commands 
+
+Let's now look at the branches in this git repository. The first two commands
 were introduced in this text further above.
+
 ```{bash}
 git branch # list you the (local) branches 
 git branch -v # displays the latest commit message along the branch
@@ -862,7 +920,8 @@ git branch -v # displays the latest commit message along the branch
 # displays all branches, that is, also remote branches that are stored localy
 git branch -va 
 ```
-From looking at the terminal output, you can see that 
+
+From looking at the terminal output, you can see that
 
 * remote branches have a name starting with `remotes`.
 
@@ -891,39 +950,49 @@ To see the remote "connections", type the following command is your friend.
 ```{bash}
 git remote -v # show what origin points to
 ```
-There are always two directions of a remote repository, one is the one where 
-you fetch (download) code from, the other one is where you push (upload) your 
-committed work. In simple settings, the two are the same. You can also add new 
+
+There are always two directions of a remote repository, one is the one where you
+fetch (download) code from, the other one is where you push (upload) your
+committed work. In simple settings, the two are the same. You can also add new
 remote commections like this:
+
 ```{bash}
 git remote add alternativeorigin https://github.com/lorwal/a_git_test_folder_alternative.git
 ```
+
 #### Use other than the master branch locally.
-By default, you will be on the master branch. However, you might want to wok on 
-a different branch. All other remote branches that are shown with 
-`git remote -va` are not local copies. To generate local copies, simply use 
+
+By default, you will be on the master branch. However, you might want to wok on
+a different branch. All other remote branches that are shown with `git remote
+-va` are not local copies. To generate local copies, simply use
+
 ```{bash}
 git checkout --track feature2 
 ```
-To create a local copy of the remote branch feature2. The `track` option means 
-that git tracks how the remote branch and the local branch differ, e.g. when 
-using `git status`. Such a relationship between the local and remote master is 
-established automatically with `git clone`. This tracking relationship also 
-allows us to use `git fetch`, `git pull` and `git push` without further 
+
+To create a local copy of the remote branch feature2. The `track` option means
+that git tracks how the remote branch and the local branch differ, e.g. when
+using `git status`. Such a relationship between the local and remote master is
+established automatically with `git clone`. This tracking relationship also
+allows us to use `git fetch`, `git pull` and `git push` without further
 instructions. This is in most cases the desired behaviour.
 
 #### Push new local branch
-Assume you branched out for a new feature (feature3) locally, and you want to 
-push the changes to github. If you want to push an entire branch that does not 
-yet exist in the remote repository, a simple `git push` will fail. To add the 
+
+Assume you branched out for a new feature (feature3) locally, and you want to
+push the changes to github. If you want to push an entire branch that does not
+yet exist in the remote repository, a simple `git push` will fail. To add the
 branch as a new remote branch, use
+
 ```{bash}
 git push --set-upstream origin feature3
 ```
-If you intend to merge this new banch with another branch at github, go to 
-github and open a pull request. The owner of the repository can then decide 
-when to merge the proposed branches on github.
-Alternatively, you can merge them locally and then push to the final branch, 
+
+If you intend to merge this new banch with another branch at github, go to
+github and open a pull request. The owner of the repository can then decide when
+to merge the proposed branches on github. Alternatively, you can merge them
+locally and then push to the final branch,
+
 e.g. merge with `master` before you push to the master branch.
 
 ## Configuring
@@ -938,7 +1007,8 @@ for an extensive discussion.
 ## Workflow 
 
 ### Basics
-The basic workflow is as follows: 
+
+The basic workflow is as follows:
 
 * you clone a repository before you start (as we just did).
 
@@ -970,6 +1040,4 @@ The basic workflow is as follows:
   that: It executes the fetching and merging in one step.
 
 * Note that you cannot push code if it is based on an out-of-date repository.
-
-### Advanced
 
