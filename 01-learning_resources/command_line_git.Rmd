@@ -1049,6 +1049,15 @@ branch as a new remote branch, use
 git push --set-upstream origin feature3
 ```
 
+Note that you need to to this every time you push a branch. Pretty annoying. 
+We can set an option for this once:
+
+```{bash}
+git config --global push.default current
+```
+
+Now, just `git push -u` is sufficient.
+
 If you intend to merge this new banch with another branch at github, go to
 github and open a pull request. The owner of the repository can then decide when
 to merge the proposed branches on github. Alternatively, you can merge them
