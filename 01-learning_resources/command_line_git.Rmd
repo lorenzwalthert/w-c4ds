@@ -413,13 +413,17 @@ If you wish to stash some of the changes, but not all, you can add the files you
 want to stash to the stagging area with `git add file1 file1`.
 
 ## Cloning 
+
 You might want to join an existing project and get a local copy from a remote repository in an URL. Some repos might be protected with password. Not the one below.
+
 ```{bash}
 git clone https://github.com/gittower/git-crash-course.git # clone example repo
 ```
 
 ## Working with branches
+
 ### show, create, delete and rename barnches
+
 ```{bash}
 git branch # show all branches (green star shows current branch)
 
@@ -432,6 +436,7 @@ git branch -m A_hotfixDropdown # rename the current bracht to A_hotfixDropdown
 ```
 
 ### Switching branches 
+
 ```{bash}
 git checkout # dischard changes in stagging area.
 git checkout coffee # switch to the coffee branch
@@ -440,7 +445,9 @@ git checkout - # switching to the last branch you were at
 # at commit 0ad5a7a6 
 git checkout -b old-project-state 0ad5a7a6 
 ```
+
 ## Integrating a full branch via merging
+
 As soon as you are done with your work, merge the changes back to `master`. 
 Imagine the following scenario:
 
@@ -456,9 +463,11 @@ Imagine the following scenario:
 * You committed all your changes in both `hotfix_212` and `master`
 
 ### Case 1: No conflicts
+
 The easy case, where you don't have conflicts between the branches (i.e. you did 
 not change the same line of code in both branches, which you can check with `git 
 diff master..hotfix_212`) has the following workflow.
+
 ```{bash}
 git checkout master # switch to the master branch
 git merge hotfix_212 # select the branch you want to merge into master.
@@ -468,13 +477,16 @@ git branch -d hotfix_212 # after you are certain that everything works.
 ### Case 2: Conflicting changes 
 
 #### Manual resolve 
+
 It gets a bit more tricky if you have deleted one file in one of the branches 
 or if you changed the same line of code in both branches. However, start the same 
 way.
+
 ```{bash}
 git checkout master # switch to the master branch
 git merge hotfix_212 # select the branch you want to merge into master.
 ```
+
 Now, git will tell you that there is a conflict, so the merge is put on hold. 
 Open the file of conflict (e.g. `conffile.txt`) and you will see that git 
 separated the conflicting sections with >>>>>>>>>>>>>>>>>>> and >>>>>>>>>>. 
@@ -482,6 +494,7 @@ Resolve the conflicts by rewriting those lines and finally get rid of the marker
 Alternatively, you can configure a merge tool like diffuse or diffmerge.
 Add the file to the stagging area and commit the changes as usual. This will 
 complete the merge.
+
 ```{bash}
 git add conffile.txt
 git commit -m "Merge conflict solved for conffile"
@@ -490,6 +503,7 @@ git branch -d hotfix_212 # after you are certain that everything works.
 ```
 
 #### Using merge strategies 
+
 Instead of resolving by hand, you can apply merge strategies and corresponding
 options. Strategies are specified with `-s`, options follow after `-X`.
 
@@ -510,13 +524,16 @@ git merge devel -s recursive -X theirs # theirs refers to the other branch
 # equivalent
 git merge -s recursive -X theirs devel
 ```
+
 We could also imagine a scenario where we want to merge changes from devel
 into master, but conflicts should be solved in favor of master
+
 ```{bash}
 git checkout master
 # favour our (the branch we are on) over the one we integrate
 git merge devel -s recursive -X ours 
 ```
+
 Note that above area all *options* to the *strategy* recursive.
 Something you are less likely to want is to merge a branch
 into another but actually discarding all changes introduced by this other 
@@ -545,13 +562,17 @@ git merge devel
 ```
 
 ### Aborting a merge
+
 If you want to undo a merge whilst you are in the middle of it, just use 
+
 ```{bash}
 git merge --abort  
 ```
+
 If you already finished the merge but wish to undo it, simply restore the commit
 on the master branch before the merge, e.g. However, you need to have the branch 
 `hotfix_212` still so you can also recover this version.
+
 ```{bash}
 git checkout master
 git revert dsf0840sdlkj --hard
@@ -559,6 +580,7 @@ git revert dsf0840sdlkj --hard
 to restore a given hash.
 
 ### Integrating selected files via checkout
+
 You can also just merge one file from branch x with branch y. However, this is 
 technically not merging, but you just checkout a version from a different branch
 in your target branch. Assuming you are in branch `devel` and you want to merge
@@ -573,6 +595,7 @@ git commit files/reduce.R -m "adapt fixing if statement from devel"
 ```
 
 ## Rebase
+
 ### Changing the order of commits
 
 You can change the order of commits. Have a look at the recent history using
@@ -651,7 +674,9 @@ git pull --rebase <remote name> <branch name>
 ```
 
 ## Undo things 
+
 ### Go back to a previous version in the git repo
+
 If you deleted a file in version control, please refer to the paragraph 
 *recover deleted files*.
 
@@ -691,7 +716,31 @@ latest commit and the one you want to go back to.
 # create a new commit equal to the hash of a previous commit.
 git reset --hard 123keri5 
 ```
+
+### Show old versions 
+
+You can show an old version of a file like this:
+```{bash}
+git show hash:path/to/file
+```
+
+If you want to save it to a file, 
+
+```{bash}
+echo "$(git show hash:path/to/file)" > file
+```
+
+Quotation marks are needed to preserve line breaks.
+
+If you want to repace a file with a certain version, just
+
+```{bash}
+git reset has -- filename
+```
+
+
 ### Recover deleted files or deleting files
+
 In contrast to the situation where one wants to restore a previous version from 
 git, having deleted a file from git does not easily allow to restore it, since 
 it is no longer tracked.
@@ -718,7 +767,9 @@ Imagine the following situation:
   checkout -- example.txt` to restore everything.
 
 ## Inspecting differences
+
 ### Changes between tracked files
+
 ####`git log`
 `git log` shows a log book with all commits
 ```{bash}
@@ -743,6 +794,7 @@ git log -p --grep=^[Uu]pdate # also show the code changes
 git log devel ^master --no-merges
 
 ```
+
 On a side note, you can also see the whole list of git commands (not only 
 commits) using `git reflog`. For example, if you switched from one branch to 
 the other, it shows you where you switched *to*, but not where you switched 
@@ -750,9 +802,12 @@ the other, it shows you where you switched *to*, but not where you switched
 and you will be able to see a log of all commands and a comment.
 
 #### `git diff`
+
 `git diff` is designed to highlight changes between two revisions or arbitrary 
 commits or files. \
+
 **between HEAD and uncommitted changes**
+
 ```{bash}
 git diff # inspect differences between HEAD and local file (= unstagged changes).
 git diff --cached # inspect differences between HEAD and INDEX (= stagged changes).
@@ -761,7 +816,9 @@ git diff --cached # inspect differences between HEAD and INDEX (= stagged change
 hihglight words that have changed.
 git diff --word-diff 
 ```
+
 **between committed revisions**
+
 ```{bash}
 git diff HEAD~2 HEAD # difference between current HEAD and the one two commits ago.
 
@@ -815,14 +872,17 @@ git diff master...branch1
 ```
 
 ### Differnces between untracked files
+
 to inspect two files and see thir difference, you can also use git. The 
 respective files don't even have to be tracked by git.
+
 ```{bash}
 # compare the two files a.do and b.do in the working directory.
 git diff --no-index a.do b.do
 ```
 
 ## Tagging 
+
 Tags can be used to create a reference to a certain stage of the directory, 
 which we can think of as verisons. There are two kinds of tags:
 
@@ -891,6 +951,7 @@ git checkout -b v1.0_hotfix
 # made since reverted v1.0.
 git checkout master
 ```
+
 ## Remote Repositories
 
 ### Cloned Repository
