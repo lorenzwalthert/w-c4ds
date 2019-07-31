@@ -11,6 +11,7 @@ output:
     toc: yes
     toc_depth: '4'
 ---
+
 ```{r, global_options,include=F}
 knitr::opts_chunk$set(eval = F) # disable eval
 ```
@@ -86,6 +87,7 @@ wc -w untitled # get words for the file untitled.
 ```
 
 *regex*
+
 ```{bash}
 
 ##  ............................................................................
@@ -109,10 +111,10 @@ perl -pi -w -e 's/add_ws_to_parse_data/enhance_parse_data/g;' **.R
 **links**
 
 You can create an alias (aka known as symbolic link) to an file or directory.
+
 ```{bash, eval = FALSE}
 ln -s vim_test vim_symlink # create vim_symlink that points to vim_test
 ```
-
 
 ### Interactive usage 
 ```{bash}
@@ -148,6 +150,7 @@ cd di[TAB]/an[TAB]
 ```
 
 **[Stars] \\* & \\*\\* **
+
 ```{bash}
 # you might want to use auto completion with the star (*). It can be leading or trailing:
 
@@ -162,21 +165,34 @@ git add self_training.ado
 # if there are multiple matching objects they are all contained in the command
 ```
 
-Two consecutive asterisks ("**") in patterns matched against full pathname may have special meaning:
+Two consecutive asterisks ("**") in patterns matched against full pathname may
+have special meaning:
 
-* A leading `**` followed by a slash means match in all directories. For example, `**/foo` matches file or directory "foo" anywhere, the same as pattern "foo". `**/foo/bar` matches file or directory "bar" anywhere that is directly under directory "foo".
-* A trailing `**` matches everything inside. For example, `abc/**` matches all files inside directory "abc", relative to the location of the .gitignore file, with infinite depth.
-* A slash followed by two consecutive asterisks then a slash matches zero or more directories. For example, `a/**/b` matches `a/b`, `a/x/b`, `a/x/y/b` and so on.
+* A leading `**` followed by a slash means match in all directories. For
+  example, `**/foo` matches file or directory "foo" anywhere, the same as
+  pattern "foo". `**/foo/bar` matches file or directory "bar" anywhere that is
+  directly under directory "foo".
+
+* A trailing `**` matches everything inside. For example, `abc/**` matches all
+  files inside directory "abc", relative to the location of the .gitignore file,
+  with infinite depth.
+
+* A slash followed by two consecutive asterisks then a slash matches zero or
+  more directories. For example, `a/**/b` matches `a/b`, `a/x/b`, `a/x/y/b` and
+  so on.
+
 * Other consecutive asterisks are considered invalid.
-
-
 
 ## Files to be ignored by git
 ### If the file was not tracked so far 
 #### Basic 
 Explicitly list files/directories to be excluded from version control. This is the simplest and most used case.
 
-To specify which files you don't want to be tracked by git, create a file called `.gitignore` (no extension!) in the relevant directory in which all the file characteristics that identify files that should not be tracked are stored. You can create and open the file like this
+To specify which files you don't want to be tracked by git, create a file called
+`.gitignore` (no extension!) in the relevant directory in which all the file
+characteristics that identify files that should not be tracked are stored. You
+can create and open the file like this
+
 ```{bash}
 touch .gitignore # creates an empty file .gitignore
 open .gitignore # open the file with standard text editor, which is TextEdit
@@ -210,9 +226,13 @@ r-project/code/* # exclude the folder, but ...
 ```
 Note from Stackoverflow: The trailing /\* is significant:
 
-* The pattern dir/ excludes a directory named dir and (implicitly) everything under it.
-With dir/, Git will never look at anything under dir, and thus will never apply any of the “un-exclude” patterns to anything under dir.
-* The pattern dir/\* says nothing about dir itself; it just excludes everything under dir. With dir/\*, Git will process the direct contents of dir, giving other patterns a chance to “un-exclude” some bit of the content (!dir/sub/).
+* The pattern dir/ excludes a directory named dir and (implicitly) everything
+  under it. With dir/, Git will never look at anything under dir, and thus will
+  never apply any of the “un-exclude” patterns to anything under dir.
+
+* The pattern dir/\* says nothing about dir itself; it just excludes everything
+  under dir. With dir/\*, Git will process the direct contents of dir, giving
+  other patterns a chance to “un-exclude” some bit of the content (!dir/sub/).
 
 ### If the file was previously tracked
 This basically involves removing a file from the version control but keep the checked out version in the local repository.
@@ -298,11 +318,11 @@ git commit
 
 #### Stashing
 
-Sometimes, you will find yourself working on something that is not yet ready to 
-commit, but then suddenly you need to work on something else (e.g. an urgent 
-bug-fix). In this case you want to save your current changes to a clipboard 
-without committing them yet. In this case, `git stash` is your friend. It
-puts your changes aside and leaves you with a clean working directory.
+Sometimes, you will find yourself working on something that is not yet ready to
+commit, but then suddenly you need to work on something else (e.g. an urgent
+bug-fix). In this case you want to save your current changes to a clipboard
+without committing them yet. In this case, `git stash` is your friend. It puts
+your changes aside and leaves you with a clean working directory.
 
 ```{bash}
 git stash # cut changes away
@@ -317,34 +337,35 @@ git stash
 
 ```
 
-You can also get a list of your stashes, the top one being the most recently 
+You can also get a list of your stashes, the top one being the most recently
 added.
+
 ```{bash}
 git stash list
 ```
 
 To get a stash back, you have multiple options
+
 ```{bash}
 git stash pop # restores latest stash and removes (!) it from your clipboard
 git stash apply <stashname> # same, but does NOT delete stash from the clipboard.
 ```
 
-You can use `git stash save 'my title for this stash'` to create a title for a 
+You can use `git stash save 'my title for this stash'` to create a title for a
 stash you saved so you can recognize it easier later.
 
 Also, if you don't want to stash all changes, do `git stash -p` to select all
-changes you want to stash with `y` and abandon changes you don't want to stash 
+changes you want to stash with `y` and abandon changes you don't want to stash
 with `n`.
 
-If you wish to stash some of the changes, but not all, you can add the files
-you want to stash to the stagging area with `git add file1 file1`.
+If you wish to stash some of the changes, but not all, you can add the files you
+want to stash to the stagging area with `git add file1 file1`.
 
 ## Cloning 
 You might want to join an existing project and get a local copy from a remote repository in an URL. Some repos might be protected with password. Not the one below.
 ```{bash}
 git clone https://github.com/gittower/git-crash-course.git # clone example repo
 ```
-
 
 ## Working with branches
 ### show, create, delete and rename barnches
@@ -373,10 +394,14 @@ As soon as you are done with your work, merge the changes back to `master`.
 Imagine the following scenario:
 
 * You have a clean branch `master`
-* You branch out to fix an issue with creating a new branch `hotfix_212` with 
-`git checkout -b hotfix_212`
+
+* You branch out to fix an issue with creating a new branch `hotfix_212` with
+  `git checkout -b hotfix_212`
+
 * You are done with the fix and want to merge back.
-* In the meanwhile, you changed some code lines in `master` as well. 
+
+* In the meanwhile, you changed some code lines in `master` as well.
+
 * You committed all your changes in both `hotfix_212` and `master`
 
 ### Case 1: No conflicts
@@ -388,7 +413,6 @@ git checkout master # switch to the master branch
 git merge hotfix_212 # select the branch you want to merge into master.
 git branch -d hotfix_212 # after you are certain that everything works.
 ```
-
 
 ### Case 2: Conflicting changes 
 
@@ -419,15 +443,16 @@ Instead of resolving by hand, you can apply merge strategies and corresponding
 options. Strategies are specified with `-s`, options follow after `-X`.
 
 The default strategy for a merge is `recursive`. So `git merge -s recursive` is
-a verbose form of `git merge`. If we want to merge a branch into another and 
-we have conflicts (because some lines were changed in both branches) we can 
-specify options how to proceed. Two popular options are `ours` and `theirs`.
-Let's look at an example. We are done with a new feature on our branch 
-devel and we want to merge it into master. In the development process, a hotfix
-was committed to master, for which we accounted in devel already. Therefore, we
-anticipate that there will be conficts in the merge and that we want to use 
-the devel version whenever there are conflicts, since we already 
-accounted for the problems. We would proceed as follows: 
+a verbose form of `git merge`. If we want to merge a branch into another and we
+have conflicts (because some lines were changed in both branches) we can specify
+options how to proceed. Two popular options are `ours` and `theirs`. Let's look
+at an example. We are done with a new feature on our branch devel and we want to
+merge it into master. In the development process, a hotfix was committed to
+master, for which we accounted in devel already. Therefore, we anticipate that
+there will be conficts in the merge and that we want to use the devel version
+whenever there are conflicts, since we already accounted for the problems. We
+would proceed as follows:
+
 ```{bash}
 git checkout master
 git merge devel -s recursive -X theirs # theirs refers to the other branch
@@ -453,9 +478,10 @@ git checkout master
 git merge -s ours devel # reintegrate devel by not taking anything from it
 ```
 
-Another use case is if you don't want to integrate all commits from devel 
-into master. Let's say you want to merge everything up to `head~3`, not
-`head~3` but all commits after `head~3` again. You could do the following:
+Another use case is if you don't want to integrate all commits from devel into
+master. Let's say you want to merge everything up to `head~3`, not `head~3` but
+all commits after `head~3` again. You could do the following:
+
 ```{bash}
 git checkout master
 git merge devel~4
@@ -466,10 +492,6 @@ git merge devel~3 -s ours -m "not actual merge, skip commit xyz"
 # will merge devel~2/1/current.
 git merge devel
 ```
-
-
-
-
 
 ### Aborting a merge
 If you want to undo a merge whilst you are in the middle of it, just use 
@@ -503,7 +525,8 @@ git commit files/reduce.R -m "adapt fixing if statement from devel"
 ### Changing the order of commits
 
 You can change the order of commits. Have a look at the recent history using
-`git log --pretty=oneline`. 
+`git log --pretty=oneline`.
+
 ```{bash}
 a931ac7c808e2471b22b5bd20f0cad046b1c5d0d c
 b76d157d507e819d7511132bdb5a80dd421d854f b
@@ -511,8 +534,9 @@ df239176e1a2ffac927d8b496ea00d5488481db5 a
 ```
 Where a is the first commit, and c the last one.
 
-Using `git rebase --interactive HEAD~2`, an interactive window opens. Note that 
+Using `git rebase --interactive HEAD~2`, an interactive window opens. Note that
 now, going down the list means going from old to newer commits (unilke above).
+
 ```{bash}
 pick b76d157 b
 pick a931ac7 c
@@ -536,9 +560,10 @@ to the top and save and exit.
 ### Squashing commits
 
 This refers to merging multiple commits into one. Again, use `git rebase -i` as
-a starting point. First, reanrange the commits as described above. Squashing 
-means merging multiple commits into one. Say, if you wanted to squash commit 
-c into b, you had to change the following:
+a starting point. First, reanrange the commits as described above. Squashing
+means merging multiple commits into one. Say, if you wanted to squash commit c
+into b, you had to change the following:
+
 ```{bash}
 pick b76d157 b
 squash a931ac7 c
@@ -558,8 +583,6 @@ b
 c
 
 ```
-
-
 
 ### integrate upstream changes
 Lets assume there is a repo on GitHub you want to contribute to. Since you cannot push
@@ -583,33 +606,36 @@ If you deleted a file in version control, please refer to the paragraph
 
 **Create a new branch**
 
-The best way to restore a previous stage is probably just by creating a new 
+The best way to restore a previous stage is probably just by creating a new
 branch with that stage indicated with a hashtag.
+
 ```{bash}
 git checkout -b 123keri5
 ```
 **Revert**
 
-Use `revert` to create a new downstream commit that removes a specific
-(upstram) commit. You are NOT destroying anything.
+Use `revert` to create a new downstream commit that removes a specific (upstram)
+commit. You are NOT destroying anything.
+
 ```{bash}
 git revert 123keri5 
 ```
 
 **Cherry-pick**
 
-In some sense, cherry-pick is the opposite of `git revert`. It allows you to 
+In some sense, cherry-pick is the opposite of `git revert`. It allows you to
 apply arbitrary commits from other branches to your current branch. You can also
 specify multiple commits at once.
+
 ```{bash}
 git cherrypick e14jd 3kg05 # apply two commits to our current branch
 ```
 
-
 **Reset**
 
-Use `reset` to go back to a previous commit and delete all commits between the 
+Use `reset` to go back to a previous commit and delete all commits between the
 latest commit and the one you want to go back to.
+
 ```{bash}
 # create a new commit equal to the hash of a previous commit.
 git reset --hard 123keri5 
@@ -621,18 +647,24 @@ it is no longer tracked.
 Imagine the following situation: 
 
 * your file `example.txt` was tracked by git.
-* you decided to move the file into the folder `example`. The file is no longer 
-in the original directory.
-* now, you type `git status`and it says "deleted: .." in red, meaning that it is 
-not yet stagged.
+
+* you decided to move the file into the folder `example`. The file is no longer
+  in the original directory.
+
+* now, you type `git status`and it says "deleted: .." in red, meaning that it is
+  not yet stagged.
+
 * type `git checkout -- example.txt` to discard the removal and restore HEAD.
-* on the other hand, if you want to confirm the removal, type 
-`git rm example.txt`. Note that, if you want to remove a whole directory, you 
-will need the `-r`flag as a double check.
-* Now, after typing `git status` the "deleted: ..." is displayed in green, 
-saying that changes are stagged.
-* To go back, you might type `git reset HEAD` (to unstage) and then 
-`git checkout -- example.txt` to restore everything.
+
+* on the other hand, if you want to confirm the removal, type `git rm
+  example.txt`. Note that, if you want to remove a whole directory, you will
+  need the `-r`flag as a double check.
+
+* Now, after typing `git status` the "deleted: ..." is displayed in green,
+  saying that changes are stagged.
+
+* To go back, you might type `git reset HEAD` (to unstage) and then `git
+  checkout -- example.txt` to restore everything.
 
 ## Inspecting differences
 ### Changes between tracked files
@@ -715,6 +747,7 @@ git diff HEAD~2 HEAD --color-words="GX." text1.txt
 ```
 
 **between branches** \
+
 ```{bash}
 # inspect all the differences between HEAD oftwo branches (master and branches).
 git diff master..branch1 
@@ -743,14 +776,16 @@ Tags can be used to create a reference to a certain stage of the directory,
 which we can think of as verisons. There are two kinds of tags:
 
 * lightweith tags are simple tags.
-* Annotated tags are tags with attributes (such as author, tagging message and 
-so on.
 
-In contrast to hashes that refer to a commit on the tree of a file, tags 
-typically refer to more than one file. For example if three files make up a 
-functioning suite, then once all three work fine together, we might want to tag 
-the bundle of all current versions of the three files and be able to restore 
-them all togehter very easily. 
+* Annotated tags are tags with attributes (such as author, tagging message and
+  so on.
+
+In contrast to hashes that refer to a commit on the tree of a file, tags
+typically refer to more than one file. For example if three files make up a
+functioning suite, then once all three work fine together, we might want to tag
+the bundle of all current versions of the three files and be able to restore
+them all togehter very easily.
+
 ```{bash}
 # pull tag. This happens by default with the following standard commands
 git pull
@@ -830,23 +865,29 @@ git branch -va
 From looking at the terminal output, you can see that 
 
 * remote branches have a name starting with `remotes`.
-* by default, the cloned repository is called `origin`. `origin` is actually 
-just a placeholder for the full url where the repository originates from. we 
-can give this repository an arbitrary name.
-* our cloned repository has different branches. These are the branches 
-available:
-    + all the branches in the remote branch
-    + a branch called HEAD, which is a pointer to the branch that is the 
-    current remote head 
-* remote branches are displayed in red when coloring is enabled 
 
-In contrast to what you saw before, this repository is "connected" to the 
-remote repository. This is also visible when typing `git status`, where you 
-will see more information than if it was an "unconnected" local repository. The 
-added information for now here is that your local branch master is up to date 
-with the remote repository *origin/master*.
+* by default, the cloned repository is called `origin`. `origin` is actually
+  just a placeholder for the full url where the repository originates from. we
+  can give this repository an arbitrary name.
+
+* our cloned repository has different branches. These are the branches
+  available:
+
+    + all the branches in the remote branch
+
+    + a branch called HEAD, which is a pointer to the branch that is the current
+      remote head
+
+* remote branches are displayed in red when coloring is enabled
+
+In contrast to what you saw before, this repository is "connected" to the remote
+repository. This is also visible when typing `git status`, where you will see
+more information than if it was an "unconnected" local repository. The added
+information for now here is that your local branch master is up to date with the
+remote repository *origin/master*.
 
 To see the remote "connections", type the following command is your friend.
+
 ```{bash}
 git remote -v # show what origin points to
 ```
@@ -885,15 +926,14 @@ when to merge the proposed branches on github.
 Alternatively, you can merge them locally and then push to the final branch, 
 e.g. merge with `master` before you push to the master branch.
 
-
 ## Configuring
 
-You got global git configurations saved in `~/yourusername/.gitconfig`.
-They can be altered using `git config --global your_command`.
-On the other hand, you can also set config options in a given directory - 
-without the global option. These configurations will then only apply to this
-folder.
-See [this link](http://stackoverflow.com/questions/4220416/can-i-specify-multiple-users-for-myself-in-gitconfig] for an extensive discussion.
+You got global git configurations saved in `~/yourusername/.gitconfig`. They can
+be altered using `git config --global your_command`. On the other hand, you can
+also set config options in a given directory - without the global option. These
+configurations will then only apply to this folder. See [this
+link](http://stackoverflow.com/questions/4220416/can-i-specify-multiple-users-for-myself-in-gitconfig]
+for an extensive discussion.
 
 ## Workflow 
 
@@ -901,29 +941,35 @@ See [this link](http://stackoverflow.com/questions/4220416/can-i-specify-multipl
 The basic workflow is as follows: 
 
 * you clone a repository before you start (as we just did).
-* you commit changes to the local repository. 
+
+* you commit changes to the local repository.
+
 * After a few commits, the commits form a 'bundle' and you are ready to push.
-Maybe, just in time, you find something else you want to change that actually 
-belongs to your latest commit. Use `--amend` and `no-edit` to modify the latest
-commit. This is only possible before you push.
-* you use `git push` (or an explicit form, e.g. `git push origin master` to 
-push the master branch to the corresponding remote branch). Do not wait too 
-long with pushing to avoid merge conflicts with other people. You need to pull 
-the latest version before you push.Just before you push your changes, you local 
-branch is "ahead" of the remote branch if the remote branch was not modified 
-since you cloned it. If we work on the master branch and make one commit, our 
-local branch will be "ahead of origin/master by n commits", as you can read 
-when you type `git status`.
-* If other people are contributing, then your previously cloned repository gets 
-out of date. You have to download the latest version of the remote repository, 
-inspect changes and merge them with your repository before you can push them to 
-the remote repository. Use `git fetch` to update the copy of the remote 
-repository on your local disc. You can use tools like `git diff` or `git log` 
-to compare the versions. At that stage, your local (unmodified) copy is said to 
-be "behind" the remote repository. If you are ready to merge the cahnges, use 
-`git merge` to merge the copy of the up-to-date remote and your changes made 
-based on the old version of the remote. `git pull` is the fast way to do that: 
-It executes the fetching and merging in one step. 
-* Note that you cannot push code if it is based on an out-of-date repository. 
+  Maybe, just in time, you find something else you want to change that actually
+  belongs to your latest commit. Use `--amend` and `no-edit` to modify the
+  latest commit. This is only possible before you push.
+
+* you use `git push` (or an explicit form, e.g. `git push origin master` to push
+  the master branch to the corresponding remote branch). Do not wait too long
+  with pushing to avoid merge conflicts with other people. You need to pull the
+  latest version before you push.Just before you push your changes, you local
+  branch is "ahead" of the remote branch if the remote branch was not modified
+  since you cloned it. If we work on the master branch and make one commit, our
+  local branch will be "ahead of origin/master by n commits", as you can read
+  when you type `git status`.
+
+* If other people are contributing, then your previously cloned repository gets
+  out of date. You have to download the latest version of the remote repository,
+  inspect changes and merge them with your repository before you can push them
+  to the remote repository. Use `git fetch` to update the copy of the remote
+  repository on your local disc. You can use tools like `git diff` or `git log`
+  to compare the versions. At that stage, your local (unmodified) copy is said
+  to be "behind" the remote repository. If you are ready to merge the cahnges,
+  use `git merge` to merge the copy of the up-to-date remote and your changes
+  made based on the old version of the remote. `git pull` is the fast way to do
+  that: It executes the fetching and merging in one step.
+
+* Note that you cannot push code if it is based on an out-of-date repository.
 
 ### Advanced
+
